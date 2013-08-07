@@ -1,3 +1,29 @@
+from .exceptions import NodeNotFound
+
+
+class NodeManager(object):
+    """ wrapper for managing nodes in a graph. """
+
+    def __init__(self, graph):
+        self.graph = graph
+
+        # Create empty set for storage of nodes in the Graph object
+        self.graph._nodes = set()
+
+    def all(self):
+        """ Return all nodes in the current graph. """
+        return self.graph._nodes
+
+    def get(self, name):
+        """ Get a single node by name. """
+        for node in self.all():
+            if node.name == name:
+                return node
+
+        # Not found, raise exception
+        raise NodeNotFound(name=name)
+
+
 class EdgeManager(object):
     """ Wrapper for managing edges in a graph. """
 
@@ -54,6 +80,7 @@ class Graph(object):
     def __init__(self, name):
         self.name = name
         self.edges = EdgeManager(graph=self)
+        self.nodes = NodeManager(graph=self)
 
 
 class Node(object):
