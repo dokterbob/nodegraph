@@ -7,16 +7,16 @@ class NodeManager(object):
     def __init__(self, graph):
         self.graph = graph
 
-        # Create empty set for storage of nodes in the Graph object
-        self.graph._nodes = set()
+        # Create empty set for storage of nodes
+        self._nodes = set()
 
     def all(self):
         """ Return all nodes in the current graph. """
-        return self.graph._nodes
+        return self._nodes
 
     def get(self, name):
         """ Get a single node by name. """
-        for node in self.all():
+        for node in self._nodes:
             if node.name == name:
                 return node
 
@@ -30,30 +30,30 @@ class EdgeManager(object):
     def __init__(self, graph):
         self.graph = graph
 
-        # Create emtpy set for storage of edges in the Graph object
-        self.graph._edges = set()
+        # Create emtpy set for storage of edges
+        self._edges = set()
 
     def all(self):
         """ Return edges in the current graph. """
-        return self.graph._edges
+        return self._edges
 
     def add(self, edge):
         """ Add an Edge to the Graph. """
         assert isinstance(edge, Edge)
 
-        self.edges.add(edge)
+        self._edges.add(edge)
 
     def remove(self, edge):
         """ Remove an Edge from the Graph. """
         assert isinstance(edge, Edge)
 
-        self.edges.remove(edge)
+        self._edges.remove(edge)
 
     def to_node(self, node):
         """ Return set of edges ending at node. """
         edges = set()
 
-        for edge in self.edges:
+        for edge in self._edges:
             if edge.to_node == node:
                 edges.add(edge)
 
@@ -63,7 +63,7 @@ class EdgeManager(object):
         """ Return set of edges starting at node. """
         edges = set()
 
-        for edge in self.edges:
+        for edge in self._edges:
             if edge.from_node == node:
                 edges.add(edge)
 
