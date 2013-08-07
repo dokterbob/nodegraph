@@ -21,22 +21,28 @@ class Node(object):
 
 class Edge(object):
     """
-    Weighed connection between two Nodes.
+    Weighed connection between two Nodes with implicit weight derived from
+    score which can only be increased or decreased.
     """
 
-    def __init__(self, from_node, to_node, weight=None):
+    def __init__(self, from_node, to_node):
         assert isinstance(from_node, Node)
         assert isinstance(to_node, Node)
         self.from_node = from_node
         self.to_node = to_node
 
-        if weight:
-            assert isinstance(weight, float)
-            assert weight >= 0.0
-            assert weight <= 1.0
-            self.weight = weight
-        else:
-            weight = 0.0
+    def increase_score(self, amount=100):
+        """ Increase the score with the given amount. """
+        self._score += amount
+
+    def decrease_score(self, amount=100):
+        """ Decrease the score with the given amount. """
+        self._score -= amount
+
+    @property
+    def score(self):
+        """ Get the current score. """
+        return self._score
 
 
 class Path(object):
