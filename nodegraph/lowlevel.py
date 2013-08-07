@@ -1,5 +1,7 @@
 class Graph(object):
-    """ Container for other objects. """
+    """
+    Named container for graph objects.
+    """
 
     def __init__(self, name):
         self.name = name
@@ -7,7 +9,7 @@ class Graph(object):
 
 class Node(object):
     """
-    Node in a graph.
+    Named node in a graph.
     """
 
     def __init__(self, graph, name):
