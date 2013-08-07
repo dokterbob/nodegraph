@@ -69,6 +69,14 @@ class EdgeManager(object):
 
         return edges
 
+    def get(self, from_node, to_node):
+        """ Return the edge linking two nodes. """
+
+        from_nodes = self.from_node(from_node)
+        to_nodes = self.to_node(to_node)
+
+        return from_nodes.union(to_nodes)
+
 
 class Graph(object):
     """
