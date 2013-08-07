@@ -1,10 +1,59 @@
+class EdgeManager(object):
+    """ Wrapper for managing edges in a graph. """
+
+    def __init__(self, graph):
+        self.graph = graph
+
+        # Create emtpy set for storage of edges in the Graph object
+        self.graph._edges = set()
+
+    def all(self):
+        """ Return edges in the current graph. """
+        return self.graph._edges
+
+    def add(self, edge):
+        """ Add an Edge to the Graph. """
+        assert isinstance(edge, Edge)
+
+        self.edges.add(edge)
+
+    def remove(self, edge):
+        """ Remove an Edge from the Graph. """
+        assert isinstance(edge, Edge)
+
+        self.edges.remove(edge)
+
+    def to_node(self, node):
+        """ Return set of edges ending at node. """
+        edges = set()
+
+        for edge in self.edges:
+            if edge.to_node == node:
+                edges.add(edge)
+
+        return edges
+
+    def from_node(self, node):
+        """ Return set of edges starting at node. """
+        edges = set()
+
+        for edge in self.edges:
+            if edge.from_node == node:
+                edges.add(edge)
+
+        return edges
+
+
 class Graph(object):
     """
     Named container for graph objects.
+
+    The information in this backend is lost as soon as the process dies.
     """
 
     def __init__(self, name):
         self.name = name
+        self.edges = EdgeManager(graph=self)
 
 
 class Node(object):
@@ -18,20 +67,11 @@ class Node(object):
 
         self.name = name
 
-    def get_edges_to(self):
-        """ Return set of edges ending at node. """
-        raise NotImplementedError
-
-    def get_edges_from(self):
-        """ Return set of edges starting at node. """
-        raise NotImplementedError
-
     def get_total_score(self):
         """ Total score of all edges starting at this node. """
 
-        edges = self.get_edges_from()
+        edges = self.graph.edges.from_node(self)
 
-        # TODO: Optimize this
         total_score = 0
         for edge in edges:
             total_score += edge.score
@@ -61,12 +101,6 @@ class Edge(object):
     def decrease_score(self, amount=100):
         """ Decrease the score with the given amount. """
         self._score -= amount
-
-    @property
-    def graph(self):
-        assert self.from_node.graph is self.to_node.graph
-
-        return self.from_node.graph
 
     @property
     def score(self):
