@@ -14,6 +14,18 @@ class NodeManager(object):
         """ Return all nodes in the current graph. """
         return self._nodes
 
+    def add(self, node):
+        """ Add a Node to the Graph. """
+        isinstance(node, Node)
+
+        self._nodes.add(node)
+
+    def remove(self, node):
+        """ Remove a Npde from the Graph. """
+        isinstance(node, Node)
+
+        self._nodes.remove(node)
+
     def get(self, name):
         """ Get a single node by name. """
         for node in self._nodes:
@@ -22,6 +34,20 @@ class NodeManager(object):
 
         # Not found, raise exception
         raise NodeNotFound(name=name)
+
+    def linked_to(self, node):
+        """ Return all nodes linked to node. """
+        edges = self.graph.edges.to_node(node)
+        nodes = [edge.node_from for edge in edges]
+
+        return nodes
+
+    def linked_from(self, node):
+        """ Return all nodes linked from node. """
+        edges = self.graph.edges.from_node(node)
+        nodes = [edge.node_to for edge in edges]
+
+        return nodes
 
 
 class EdgeManager(object):
