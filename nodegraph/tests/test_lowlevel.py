@@ -126,6 +126,36 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         # Old graph has not changed
         self.test_init()
 
+    def test_increase_score(self):
+        """ Test increasing the score. """
+        self.assertEquals(self.e.score, 0)
+
+        # Increase by 100 (default)
+        self.e.increase_score()
+
+        self.assertEquals(self.e.score, 100)
+
+        # Increase by another 10
+        self.e.increase_score(10)
+
+        self.assertEquals(self.e.score, 110)
+
+    def test_decrease_score(self):
+        # Increase score to 110 by repeating test above
+        self.test_increase_score()
+
+        # Decrease with 100 (default)
+        self.e.decrease_score()
+        self.assertEquals(self.e.score, 10)
+
+        # Decrease by another 5
+        self.e.decrease_score(5)
+        self.assertEquals(self.e.score, 5)
+
+        # Assert that decreasing it again with 100 does not go below 0
+        self.e.decrease_score()
+        self.assertEquals(self.e.score, 0)
+
 
 if __name__ == '__main__':
     unittest.main()

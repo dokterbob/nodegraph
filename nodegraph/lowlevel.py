@@ -94,8 +94,12 @@ class Edge(object):
         self._score += amount
 
     def decrease_score(self, amount=100):
-        """ Decrease the score with the given amount. """
-        self._score -= amount
+        """ Decrease the score with the given amount - but never less than 0. """
+
+        if amount > self._score:
+            self._score = 0
+        else:
+            self._score -= amount
 
     def key(self):
         """ Key used for hashing and comparisons. """
