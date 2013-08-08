@@ -2,12 +2,12 @@ from .exceptions import NodeNotFound, EdgeNotFound
 
 
 class NodeManager(object):
-    """ wrapper for managing nodes in a graph. """
+    """ Manager for Nodes in a Graph. """
 
     def __init__(self, graph):
         self.graph = graph
 
-        # Shorthand
+        # Shorthand for storage
         self._nodes = graph.store.nodes
 
     def all(self):
@@ -51,12 +51,12 @@ class NodeManager(object):
 
 
 class EdgeManager(object):
-    """ Wrapper for managing edges in a graph. """
+    """ Manager for Edges in a Graph. """
 
     def __init__(self, graph):
         self.graph = graph
 
-        # Shorthand
+        # Shorthand for storage
         self._edges = graph.store.edges
 
     def all(self):
@@ -109,3 +109,25 @@ class EdgeManager(object):
         assert len(edges) == 1
 
         return edges.pop()
+
+
+class PathManager(object):
+    """ Manager for Paths in a Graph. """
+
+    def __init__(self, graph):
+        self.graph = graph
+
+        # Shorthand for storage
+        self._paths = graph.store.paths
+
+    def all(self):
+        """ Return Paths in the current Graph. """
+        return self._paths
+
+    def add(self, path):
+        """ Add a Path to the Graph. """
+        self._paths.add(path)
+
+    def remove(self, path):
+        """ Remove a Path from the Graph. """
+        self._paths.remove(path)

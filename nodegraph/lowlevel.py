@@ -1,4 +1,4 @@
-from .managers import EdgeManager, NodeManager
+from .managers import EdgeManager, NodeManager, PathManager
 
 from .store import GraphStore
 
@@ -24,6 +24,7 @@ class Graph(object):
         # Initialize managers
         self.edges = EdgeManager(graph=self)
         self.nodes = NodeManager(graph=self)
+        self.paths = PathManager(graph=self)
 
     def key(self):
         """ Key used for hashing and comparisons. """
@@ -155,8 +156,19 @@ class Path(object):
     def __init__(self, edges=[]):
         # TODO: Put this iteration into the assert statement, somehow
         for edge in edges:
+            # They should all be edges
             assert isinstance(edge, Edge)
+
+            # All should have same graph
+            assert edge.graph == edges[0].graph
+
+        # Store Edges on object (for now)
         self.edges = edges
+
+        # Set graph
+        self.graph = edges[0].graph
+
+        self.graph.paths.add(self)
 
     def key(self):
         """ Key used for hashing and comparisons. """

@@ -20,5 +20,8 @@ class GraphStore(object):
         # Create emtpy set for storage of edges
         self.edges = set()
 
+        # Create empty set for storage of paths
+        self.paths = set()
+
         # Create an ordered dictionary for storing edge -> score pairs
         self.scores = {}
