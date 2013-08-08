@@ -126,6 +126,8 @@ class Edge(object):
 
     @score.setter
     def score(self, value):
+        assert isinstance(value, int)
+
         self.graph.store.scores[self] = value
 
     @score.deleter
