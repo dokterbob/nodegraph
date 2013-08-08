@@ -17,6 +17,15 @@ class Graph(object):
         self.edges = EdgeManager(graph=self)
         self.nodes = NodeManager(graph=self)
 
+    def key(self):
+        """ Key used for hashing and comparisons. """
+        return self.name
+
+    def __eq__(x, y):
+        return x.key() == y.key()
+
+    def __hash__(self):
+        return hash(self.key())
 
 class Node(object):
     """
@@ -35,6 +44,15 @@ class Node(object):
         # Add oneself to graph
         self.graph.nodes.add(self)
 
+    def key(self):
+        """ Key used for hashing and comparisons. """
+        return (self.graph.key(), self.name)
+
+    def __eq__(x, y):
+        return x.key() == y.key()
+
+    def __hash__(self):
+        return hash(self.key())
 
     def get_total_score(self):
         """ Total score of all edges starting at this node. """
@@ -79,6 +97,16 @@ class Edge(object):
         """ Decrease the score with the given amount. """
         self._score -= amount
 
+    def key(self):
+        """ Key used for hashing and comparisons. """
+        return (self.from_node.key(), self.to_node.key())
+
+    def __eq__(x, y):
+        return x.key() == y.key()
+
+    def __hash__(self):
+        return hash(self.key())
+
     @property
     def score(self):
         """ Return the current score. """
@@ -108,14 +136,39 @@ class Path(object):
             assert isinstance(edge, Edge)
         self.edges = edges
 
+    def key(self):
+        """ Key used for hashing and comparisons. """
+        keys = [edge.key() for edge in self.edges]
+
+        return tuple(keys)
+
+    def __eq__(x, y):
+        return x.key() == y.key()
+
+    def __hash__(self):
+        return hash(self.key())
+
 
 class Ensemble(object):
     """
     Collection of Paths between two Nodes with compound weight as sum of path
     weights.
     """
+
     def __init__(self, paths=set()):
         # TODO: Put this iteration into the assert statement, somehow
         for path in paths:
             assert isinstance(path, Path)
         self.paths = paths
+
+    def key(self):
+        """ Key used for hashing and comparisons. """
+        keys = [path.key() for path in path.edges]
+
+        return tuple(keys)
+
+    def __eq__(x, y):
+        return x.key() == y.key()
+
+    def __hash__(self):
+        return hash(self.key())
