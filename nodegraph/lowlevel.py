@@ -20,10 +20,16 @@ class Node(object):
     """
 
     def __init__(self, graph, name):
+        # Set name
+        self.name = name
+
+        # Associate with graph
         assert isinstance(graph, Graph)
         self.graph = graph
 
-        self.name = name
+        # Add oneself to graph
+        self.graph.nodes.add(self)
+
 
     def get_total_score(self):
         """ Total score of all edges starting at this node. """
