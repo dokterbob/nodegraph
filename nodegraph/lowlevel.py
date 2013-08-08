@@ -119,9 +119,12 @@ class Edge(object):
     @property
     def weight(self):
         """ Return the current weight. """
-        total_score = self.from_node.get_total_score()
 
-        assert self._score
+        # No score, no weight: simple optimizations, prevents division by zero
+        if not self.score:
+            return 0.0
+
+        total_score = self.from_node.get_total_score()
         assert total_score
 
         weight = self.score / total_score

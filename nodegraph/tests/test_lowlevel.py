@@ -156,6 +156,16 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.e.decrease_score()
         self.assertEquals(self.e.score, 0)
 
+    def test_weight(self):
+        """ Test weight for Graph with single Edge. """
+
+        # Initially, no score has been assigned - hence no weight.
+        self.assertAlmostEqual(self.e.weight, 0.0)
+
+        # With score increased, weight should be 1.0
+        self.e.increase_score()
+        self.assertAlmostEqual(self.e.weight, 1.0)
+
 
 if __name__ == '__main__':
     unittest.main()
