@@ -108,4 +108,4 @@ class EdgeManager(object):
 
         assert len(edges) == 1
 
-        return edges[0]
+        return edges.pop()
