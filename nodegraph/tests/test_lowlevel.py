@@ -40,6 +40,16 @@ class TestGraph(GraphTestMixin, unittest.TestCase):
         self.assertFalse(self.g.edges.all())
         self.assertFalse(self.g.nodes.all())
 
+    def test_duplicate(self):
+        """ Graphs with the same name should be identical and vice versa. """
+        duplicate_graph = Graph(name=self.g.name)
+
+        self.assertEquals(self.g, duplicate_graph)
+
+        new_graph = Graph(name='new_graph')
+
+        self.assertNotEquals(self.g, new_graph)
+
 
 class TestNode(NodeTestMixin, unittest.TestCase):
     """ Tests for Node. """
@@ -55,6 +65,36 @@ class TestNode(NodeTestMixin, unittest.TestCase):
         # Initial total score for trivial graph (single Node) is 0
         self.assertEquals(self.n.get_total_score(), 0)
 
+    def test_duplicate(self):
+        """ Nodes with the same name should be identical and vice versa.. """
+        duplicate_node = Node(graph=self.n.graph, name=self.n.name)
+
+        # Assert equality
+        self.assertEquals(self.n, duplicate_node)
+
+        # Nothing should have changed in the graph from inital state
+        self.test_init()
+
+        new_node = Node(graph=self.n.graph, name='new_node')
+
+        # Assert inequality
+        self.assertNotEquals(self.n, new_node)
+
+        # Should have been added to the Graph
+        self.assertEquals(set([self.n, new_node]), self.g.nodes.all())
+
+    def test_twographs(self):
+        """ Test that two graphs do not interfere. """
+
+        new_graph = Graph(name='new_graph')
+
+        # Should be empty
+        self.assertEquals(set(), new_graph.nodes.all())
+        self.assertEquals(set(), new_graph.edges.all())
+
+        # Old graph has not changed
+        self.test_init()
+
 
 class TestEdge(EdgeTestMixin, unittest.TestCase):
     """ Tests for Edge. """
@@ -64,6 +104,27 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEquals(set([self.n, self.n2]), self.g.nodes.all())
         self.assertEquals(set([self.e]), self.g.edges.all())
 
+    def test_duplicate(self):
+        """ Edges with same two nodes should be identical and vice versa. """
+        duplicate_edge = Edge(from_node=self.n, to_node=self.n2)
+
+        # Assert equality
+        self.assertEquals(self.e, duplicate_edge)
+
+        # Assert nothing has changed
+        self.test_init()
+
+    def test_twographs(self):
+        """ Test that two graphs do not interfere. """
+
+        new_graph = Graph(name='new_graph')
+
+        # Should be empty
+        self.assertEquals(set(), new_graph.nodes.all())
+        self.assertEquals(set(), new_graph.edges.all())
+
+        # Old graph has not changed
+        self.test_init()
 
 
 if __name__ == '__main__':
