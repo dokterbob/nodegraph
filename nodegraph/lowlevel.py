@@ -142,7 +142,7 @@ class Edge(object):
         total_score = self.from_node.get_total_score()
         assert total_score
 
-        weight = self.score / total_score
+        weight = self.score / float(total_score)
 
         return weight
 

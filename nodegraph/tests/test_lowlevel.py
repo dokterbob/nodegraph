@@ -176,6 +176,45 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.e.increase_score()
         self.assertAlmostEqual(self.e.weight, 1.0)
 
+    def test_multiweight(self):
+        """ Test weight distribution for multiple Edges from `self.n`. """
+
+        self.e.increase_score()
+        self.assertEqual(self.e.score, 100)
+
+        n3 = Node(graph=self.g, name='node_3')
+        e2 = Edge(self.n, n3)
+        e2.increase_score()
+        self.assertEqual(e2.score, 100)
+
+        # Total score
+        self.assertEquals(self.n.get_total_score(), 200)
+
+        # Equal weight distribution
+        self.assertAlmostEqual(self.e.weight, 0.5)
+        self.assertAlmostEqual(e2.weight, 0.5)
+
+    def test_multiweight_unequal(self):
+        """
+        Test unequal weight distribution for multiple Edges from `self.n`.
+        """
+        # Start from situation above
+        n3 = Node(graph=self.g, name='node_3')
+        e2 = Edge(self.n, n3)
+        e2.increase_score()
+        self.assertEqual(e2.score, 100)
+
+        # Unequal weight distribution
+        self.e.increase_score(200)
+        self.assertEqual(self.e.score, 200)
+
+        # Total score
+        self.assertEquals(self.n.get_total_score(), 300)
+
+        # 2/3 for self.e - 1/3 for e2
+        self.assertAlmostEqual(self.e.weight, 0.66666666)
+        self.assertAlmostEqual(e2.weight, 0.33333333)
+
 
 if __name__ == '__main__':
     unittest.main()
