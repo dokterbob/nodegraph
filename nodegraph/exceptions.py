@@ -18,3 +18,8 @@ class ObjectNotFound(Exception):
 class NodeNotFound(ObjectNotFound):
     """ Exception raised when a queried node could not be found. """
     object_type = 'Node'
+
+
+class EdgeNotFound(ObjectNotFound):
+    """ Exception raised when a queried edge could not be found. """
+    object_type = 'Edge'
