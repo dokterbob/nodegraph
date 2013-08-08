@@ -91,9 +91,6 @@ class Edge(object):
         assert self.from_node.graph == self.to_node.graph
         self.graph = self.from_node.graph
 
-        # Initialize score
-        self.score = 0
-
         # Add oneself to graph
         self.graph.edges.add(self)
 
@@ -122,7 +119,7 @@ class Edge(object):
     @property
     def score(self):
         """ Score storage wrapper. """
-        return self.graph.store.scores[self]
+        return self.graph.store.scores.get(self, 0)
 
     @score.setter
     def score(self, value):

@@ -106,10 +106,20 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
 
     def test_duplicate(self):
         """ Edges with same two nodes should be identical and vice versa. """
+
+        # Increase score to make life more interesting
+        self.e.increase_score()
+
         duplicate_edge = Edge(from_node=self.n, to_node=self.n2)
 
         # Assert equality
         self.assertEquals(self.e, duplicate_edge)
+
+        # Assert the scores remain up to date
+        self.assertEquals(duplicate_edge.score, 100)
+
+        duplicate_edge.increase_score()
+        self.assertEquals(self.e.score, 200)
 
         # Assert nothing has changed
         self.test_init()
