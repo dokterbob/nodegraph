@@ -162,7 +162,7 @@ class Path(object):
             # All should have same graph
             assert edge.graph == edges[0].graph
 
-        # Store Edges on object (for now)
+        # Store Edges on object
         self.edges = edges
 
         # Set graph
