@@ -9,7 +9,11 @@ class Graph(object):
     """
 
     def __init__(self, name):
+        # Set name
+        assert isinstance(name, basestring)
         self.name = name
+
+        # Initialize managers
         self.edges = EdgeManager(graph=self)
         self.nodes = NodeManager(graph=self)
 
@@ -21,6 +25,7 @@ class Node(object):
 
     def __init__(self, graph, name):
         # Set name
+        assert isinstance(name, basestring)
         self.name = name
 
         # Associate with graph
@@ -50,13 +55,21 @@ class Edge(object):
     """
 
     def __init__(self, from_node, to_node):
+        # Initialize properties
         assert isinstance(from_node, Node)
         assert isinstance(to_node, Node)
         self.from_node = from_node
         self.to_node = to_node
 
+        # Set graph
+        assert self.from_node.graph == self.to_node.graph
+        self.graph = self.from_node.graph
+
         # Initialize score
         self._score = 0
+
+        # Add oneself to graph
+        self.graph.edges.add(self)
 
     def increase_score(self, amount=100):
         """ Increase the score with the given amount. """

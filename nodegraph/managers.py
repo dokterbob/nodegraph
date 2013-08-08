@@ -65,13 +65,13 @@ class EdgeManager(object):
 
     def add(self, edge):
         """ Add an Edge to the Graph. """
-        assert isinstance(edge, Edge)
+        # assert isinstance(edge, Edge)
 
         self._edges.add(edge)
 
     def remove(self, edge):
         """ Remove an Edge from the Graph. """
-        assert isinstance(edge, Edge)
+        # assert isinstance(edge, Edge)
 
         self._edges.remove(edge)
 
