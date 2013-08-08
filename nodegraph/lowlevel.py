@@ -1,5 +1,7 @@
 from .managers import EdgeManager, NodeManager
 
+from .store import GraphStore
+
 
 class Graph(object):
     """
@@ -8,10 +10,16 @@ class Graph(object):
     The information in this backend is lost as soon as the process dies.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, store=None):
         # Set name
         assert isinstance(name, basestring)
         self.name = name
+
+        # Initialize the store
+        if not store:
+            self.store = GraphStore(graph=self)
+
+        assert isinstance(self.store, GraphStore)
 
         # Initialize managers
         self.edges = EdgeManager(graph=self)
@@ -84,22 +92,22 @@ class Edge(object):
         self.graph = self.from_node.graph
 
         # Initialize score
-        self._score = 0
+        self.score = 0
 
         # Add oneself to graph
         self.graph.edges.add(self)
 
     def increase_score(self, amount=100):
         """ Increase the score with the given amount. """
-        self._score += amount
+        self.score += amount
 
     def decrease_score(self, amount=100):
         """ Decrease the score with the given amount - but never less than 0. """
 
-        if amount > self._score:
-            self._score = 0
+        if amount > self.score:
+            self.score = 0
         else:
-            self._score -= amount
+            self.score -= amount
 
     def key(self):
         """ Key used for hashing and comparisons. """
@@ -113,8 +121,16 @@ class Edge(object):
 
     @property
     def score(self):
-        """ Return the current score. """
-        return self._score
+        """ Score storage wrapper. """
+        return self.graph.store.scores[self]
+
+    @score.setter
+    def score(self, value):
+        self.graph.store.scores[self] = value
+
+    @score.deleter
+    def score(self):
+        del self.graph.store.scores[self]
 
     @property
     def weight(self):

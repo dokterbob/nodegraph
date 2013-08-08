@@ -7,8 +7,8 @@ class NodeManager(object):
     def __init__(self, graph):
         self.graph = graph
 
-        # Create empty set for storage of nodes
-        self._nodes = set()
+        # Shorthand
+        self._nodes = graph.store.nodes
 
     def all(self):
         """ Return all nodes in the current graph. """
@@ -56,8 +56,8 @@ class EdgeManager(object):
     def __init__(self, graph):
         self.graph = graph
 
-        # Create emtpy set for storage of edges
-        self._edges = set()
+        # Shorthand
+        self._edges = graph.store.edges
 
     def all(self):
         """ Return edges in the current graph. """
