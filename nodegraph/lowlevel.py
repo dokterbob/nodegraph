@@ -1,4 +1,4 @@
-from .exceptions import NodeNotFound
+from .exceptions import NodeNotFound, EdgeNotFound
 
 
 class NodeManager(object):
@@ -101,8 +101,14 @@ class EdgeManager(object):
         from_nodes = self.from_node(from_node)
         to_nodes = self.to_node(to_node)
 
-        return from_nodes.union(to_nodes)
+        edges = from_nodes.union(to_nodes)
 
+        if not edges:
+            raise EdgeNotFound(from_node=from_node, to_node=to_node)
+
+        assert len(edges) == 1
+
+        return edges[0]
 
 class Graph(object):
     """
