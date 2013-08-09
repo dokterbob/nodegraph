@@ -173,17 +173,17 @@ class Edge(object):
     @property
     def score(self):
         """ Score storage wrapper. """
-        return self.graph.store.scores.get(self, 0)
+        return self.graph.store.edge_score.get(self, 0)
 
     @score.setter
     def score(self, value):
         assert isinstance(value, int)
 
-        self.graph.store.scores[self] = value
+        self.graph.store.edge_score[self] = value
 
     @score.deleter
     def score(self):
-        del self.graph.store.scores[self]
+        del self.graph.store.edge_score[self]
 
     @property
     def weight(self):

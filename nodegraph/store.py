@@ -30,8 +30,8 @@ class GraphStore(object):
         # Create empty dictionery (Edge -> ttl_ for storing edge ttl's
         self.edge_ttl = {}
 
-        # Create a dictionary for storing edge -> score pairs
-        self.scores = {}
+        # Create a dictionary for storing Edge -> score pairs
+        self.edge_score = {}
 
     def key(self):
         """ Key used for hashing and comparisons. """
