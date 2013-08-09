@@ -9,5 +9,4 @@ TODO
 ----
 #. Cache for get_score_out()
 #. Introduce Path weight.
-#. Remove Path state from store, replace by Path weight cache.
 #. Syntactic cleanup: store.scores -> store.edge_score

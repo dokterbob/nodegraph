@@ -30,9 +30,6 @@ class GraphStore(object):
         # Create empty dictionery (Edge -> ttl_ for storing edge ttl's
         self.edge_ttl = {}
 
-        # Create empty set for storage of paths
-        self.paths = set()
-
         # Create a dictionary for storing edge -> score pairs
         self.scores = {}
 

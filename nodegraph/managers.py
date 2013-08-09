@@ -116,18 +116,3 @@ class PathManager(object):
 
     def __init__(self, graph):
         self.graph = graph
-
-        # Shorthand for storage
-        self._paths = graph.store.paths
-
-    def all(self):
-        """ Return Paths in the current Graph. """
-        return self._paths
-
-    def add(self, path):
-        """ Add a Path to the Graph. """
-        self._paths.add(path)
-
-    def remove(self, path):
-        """ Remove a Path from the Graph. """
-        self._paths.remove(path)

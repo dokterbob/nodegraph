@@ -25,8 +25,6 @@ class Path(object):
         # Set graph
         self.graph = edges[0].graph
 
-        self.graph.paths.add(self)
-
     def key(self):
         """ Key used for hashing and comparisons. """
         keys = [edge.key() for edge in self.edges]
