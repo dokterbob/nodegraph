@@ -1,3 +1,6 @@
+from .cache import GraphCache
+
+
 class GraphStore(object):
     """
     Store for Graph data; Edges (scores) and Nodes are stored here.
@@ -32,6 +35,9 @@ class GraphStore(object):
 
         # Create a dictionary for storing Edge -> score pairs
         self.edge_score = {}
+
+        # Key-value cache
+        self.cache = GraphCache()
 
     def key(self):
         """ Key used for hashing and comparisons. """
