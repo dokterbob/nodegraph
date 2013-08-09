@@ -74,23 +74,22 @@ class TestNode(NodeTestMixin, unittest.TestCase):
         # Initial total score for trivial graph (single Node) is 0
         self.assertEquals(self.n.get_total_score(), 0)
 
-    def test_duplicate(self):
-        """ Nodes with the same name should be identical and vice versa.. """
-        duplicate_node = Node(graph=self.n.graph, name=self.n.name)
+    def test_hash(self):
+        """ Test hashing for Node / equivalence of duplicates. """
+        same_node = Node(graph=self.g, name=self.n.name)
+        other_node = Node(graph=self.g, name='other_node')
 
-        # Assert equality
-        self.assertEquals(self.n, duplicate_node)
+        # Node objects equality
+        self.assertEquals(same_node, self.n)
+        self.assertNotEquals(other_node.key(), self.n.key())
 
-        # Nothing should have changed in the graph from inital state
-        self.test_init()
+        # Key equality
+        self.assertEquals(same_node.key(), self.n.key())
+        self.assertNotEquals(other_node.key(), self.n.key())
 
-        new_node = Node(graph=self.n.graph, name='new_node')
-
-        # Assert inequality
-        self.assertNotEquals(self.n, new_node)
-
-        # Should have been added to the Graph
-        self.assertEquals(set([self.n, new_node]), self.g.nodes.all())
+        # Hash equality
+        self.assertEquals(hash(same_node), hash(self.n))
+        self.assertNotEquals(hash(other_node), hash(self.n))
 
     def test_twographs(self):
         """ Test that two graphs do not interfere. """
