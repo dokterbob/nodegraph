@@ -154,13 +154,17 @@ class Path(object):
     """
 
     def __init__(self, edges=[]):
-        # TODO: Put this iteration into the assert statement, somehow
-        for edge in edges:
-            # They should all be edges
-            assert isinstance(edge, Edge)
+        # This is equivalent to the assert statement, see:
+        # http://docs.python.org/2/reference/simple_stmts.html#the-assert-statement
+        if __debug__:
+            for edge in edges:
+                # They should all be edges
+                if not isinstance(edge, Edge):
+                    raise AssertionError
 
-            # All should have same graph
-            assert edge.graph == edges[0].graph
+                # All should have same graph
+                if not edge.graph == edges[0].graph:
+                    raise AssertionError
 
         # Store Edges on object
         self.edges = edges
@@ -190,9 +194,13 @@ class Ensemble(object):
     """
 
     def __init__(self, paths=set()):
-        # TODO: Put this iteration into the assert statement, somehow
-        for path in paths:
-            assert isinstance(path, Path)
+        # This is equivalent to the assert statement, see:
+        # http://docs.python.org/2/reference/simple_stmts.html#the-assert-statement
+        if __debug__:
+            for path in paths:
+                if not isinstance(path, Path):
+                    raise AssertionError
+
         self.paths = paths
 
     def key(self):
