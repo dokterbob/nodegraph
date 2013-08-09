@@ -101,8 +101,8 @@ class Node(object):
     def ttl(self):
         del self.graph.store.node_ttl[self]
 
-    def get_total_score(self):
-        """ Total score of all edges starting at this node. """
+    def get_score_out(self):
+        """ Total score of all Edges pointing outward form this Node. """
 
         edges = self.graph.edges.from_node(self)
 
@@ -193,7 +193,7 @@ class Edge(object):
         if not self.score:
             return 0.0
 
-        total_score = self.from_node.get_total_score()
+        total_score = self.from_node.get_score_out()
         assert total_score
 
         weight = self.score / float(total_score)

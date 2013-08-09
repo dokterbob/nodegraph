@@ -7,8 +7,7 @@ Perspectivist graph database.
 
 TODO
 ----
-#. Introduce ttl property to Nodes and Edges.
+#. Cache for get_score_out()
 #. Introduce Path weight.
 #. Remove Path state from store, replace by Path weight cache.
-#. Syntactic cleanup: get_total_score -> total_score
 #. Syntactic cleanup: store.scores -> store.edge_score

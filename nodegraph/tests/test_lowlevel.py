@@ -42,11 +42,11 @@ class TestNode(NodeTestMixin, unittest.TestCase):
         self.assertEquals(set([self.n]), self.g.nodes.all())
         self.assertEquals(set([]), self.g.edges.all())
 
-    def test_get_total_score(self):
+    def test_get_score_out(self):
         """ Test getting the total score for single node. """
 
         # Initial total score for trivial graph (single Node) is 0
-        self.assertEquals(self.n.get_total_score(), 0)
+        self.assertEquals(self.n.get_score_out(), 0)
 
     def test_hash(self):
         """ Test hashing for Node / equivalence of duplicates. """
@@ -184,7 +184,7 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEqual(e2.score, 100)
 
         # Total score
-        self.assertEquals(self.n.get_total_score(), 200)
+        self.assertEquals(self.n.get_score_out(), 200)
 
         # Equal weight distribution
         self.assertAlmostEqual(self.e.weight, 0.5)
@@ -205,7 +205,7 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEqual(self.e.score, 200)
 
         # Total score
-        self.assertEquals(self.n.get_total_score(), 300)
+        self.assertEquals(self.n.get_score_out(), 300)
 
         # 2/3 for self.e - 1/3 for e2
         self.assertAlmostEqual(self.e.weight, 0.66666666)
