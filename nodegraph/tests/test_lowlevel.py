@@ -14,6 +14,9 @@ class TestGraph(GraphTestMixin, unittest.TestCase):
         self.assertFalse(self.g.edges.all())
         self.assertFalse(self.g.nodes.all())
 
+        self.assertEquals(self.g.name, 'test_graph')
+        self.assertEquals(self.g.ttl, 0)
+
     def test_duplicate(self):
         """ Graphs with the same name should be identical and vice versa. """
         duplicate_graph = Graph(name=self.g.name)
@@ -24,12 +27,18 @@ class TestGraph(GraphTestMixin, unittest.TestCase):
 
         self.assertNotEquals(self.g, new_graph)
 
+    def test_ttl(self):
+        """ Assert that the ttl property gets updated properly. """
+        self.g.ttl = 5
+        self.assertEquals(self.g.ttl, 5)
+
 
 class TestNode(NodeTestMixin, unittest.TestCase):
     """ Tests for Node. """
 
     def test_init(self):
         """ Test created Node. """
+        self.assertEquals(self.n.ttl, 0)
         self.assertEquals(set([self.n]), self.g.nodes.all())
         self.assertEquals(set([]), self.g.edges.all())
 
@@ -68,12 +77,26 @@ class TestNode(NodeTestMixin, unittest.TestCase):
         # Old graph has not changed
         self.test_init()
 
+    def test_ttl(self):
+        """
+        Assert that the ttl property functions as expected.
+        """
+
+        # By default, ttl proxies the Graph default
+        self.g.ttl = 5
+        self.assertEquals(self.n.ttl, 5)
+
+        # When overridden, it should stay persistent
+        self.n.ttl = 10
+        self.assertEquals(self.n.ttl, 10)
+
 
 class TestEdge(EdgeTestMixin, unittest.TestCase):
     """ Tests for Edge. """
 
     def test_init(self):
         """ Test created Edge. """
+        self.assertEquals(self.e.ttl, 0)
         self.assertEquals(set([self.n, self.n2]), self.g.nodes.all())
         self.assertEquals(set([self.e]), self.g.edges.all())
 
@@ -187,6 +210,25 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         # 2/3 for self.e - 1/3 for e2
         self.assertAlmostEqual(self.e.weight, 0.66666666)
         self.assertAlmostEqual(e2.weight, 0.33333333)
+
+    def test_ttl(self):
+        """ Test ttl behaviour for Edge. """
+
+        # By default, the least of the ttl for the nodes should be used
+        self.n.ttl = 5
+        self.n2.ttl = 3
+
+        self.assertEquals(self.e.ttl, 3)
+
+        # Other way around
+        self.n.ttl = 2
+        self.n2.ttl = 8
+
+        self.assertEquals(self.e.ttl, 2)
+
+        # When overridden, it should stay persistent
+        self.e.ttl = 10
+        self.assertEquals(self.e.ttl, 10)
 
 
 if __name__ == '__main__':

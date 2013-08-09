@@ -47,7 +47,7 @@ class Graph(object):
     def ttl(self, value):
         assert isinstance(value, int)
 
-        self.store.graph_name = value
+        self.store.graph_ttl = value
 
     @property
     def name(self):
@@ -62,7 +62,7 @@ class Node(object):
     Named node in a graph.
     """
 
-    def __init__(self, graph, name, ttl=None):
+    def __init__(self, graph, name):
         # Set name
         assert isinstance(name, basestring)
         self.name = name
@@ -70,10 +70,6 @@ class Node(object):
         # Associate with graph
         assert isinstance(graph, Graph)
         self.graph = graph
-
-        # Set ttl explicitly when specified (otherwise Graph default is used)
-        if ttl:
-            self.ttl = ttl
 
         # Add oneself to graph
         self.graph.nodes.add(self)
@@ -158,6 +154,21 @@ class Edge(object):
 
     def __hash__(self):
         return hash(self.key())
+
+    @property
+    def ttl(self):
+        """
+        Edge ttl property wrapper. Returns minimum ttl of nodes as default.
+        """
+        return self.graph.store.edge_ttl.get(self,
+            min(self.from_node.ttl, self.to_node.ttl)
+        )
+
+    @ttl.setter
+    def ttl(self, value):
+        assert isinstance(value, int)
+
+        self.graph.store.edge_ttl[self] = value
 
     @property
     def score(self):
