@@ -48,6 +48,24 @@ class TestNode(NodeTestMixin, unittest.TestCase):
         # Initial total score for trivial graph (single Node) is 0
         self.assertEquals(self.n.get_score_out(), 0)
 
+    def test_get_score_out_cache(self):
+        """ Basic test for cache on get_score_out(). """
+        # Test caching with ttl of 5
+        self.g.ttl = 5
+
+        # Populate cache
+        self.n.get_score_out()
+
+        # Test cache
+        self.assertEquals(self.g.store.cache.get((self.n, 'score')), 0)
+        self.assertTrue(self.g.store.cache.get_expires((self.n, 'score')))
+
+        # Test overriding the cache
+        self.g.store.cache.set((self.n, 'score'), 5, 5)
+
+        # Now cached value should be returned
+        self.assertEquals(self.n.get_score_out(), 5)
+
     def test_hash(self):
         """ Test hashing for Node / equivalence of duplicates. """
         same_node = Node(graph=self.g, name=self.n.name)

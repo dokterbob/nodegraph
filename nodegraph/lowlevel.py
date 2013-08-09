@@ -1,3 +1,5 @@
+import sys
+
 from .managers import EdgeManager, NodeManager, PathManager
 
 from .store import GraphStore
@@ -104,11 +106,34 @@ class Node(object):
     def get_score_out(self):
         """ Total score of all Edges pointing outward form this Node. """
 
+        # Nice hashable tuple of self and 'score' identifier
+        cache_key = (self, 'score')
+
+        # Hit cache
+        cached = self.graph.store.cache.get(cache_key)
+        if cached:
+            return cached
+
+        # No cache available -> calculate!
         edges = self.graph.edges.from_node(self)
 
         total_score = 0
-        for edge in edges:
-            total_score += edge.score
+
+        if edges:
+            # Calculate minimal Edge ttl and total Edge score
+            min_ttl = sys.maxint
+            for edge in edges:
+                if edge.ttl < min_ttl:
+                    min_ttl = edge.ttl
+
+                total_score += edge.score
+        else:
+            # No Edges available to calculate score; do negative caching
+            # during Node default ttl.
+            min_ttl = self.ttl
+
+        # Write to cache
+        self.graph.store.cache.set(cache_key, total_score, min_ttl)
 
         return total_score
 

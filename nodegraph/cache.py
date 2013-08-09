@@ -29,14 +29,11 @@ class GraphCache(object):
 
         expires = ttl + seconds
 
-        assert isinstance(expires, int)
+        assert isinstance(expires, int), '{0} is not an integer'.format(expires)
         return expires
 
     def set(self, key, value, ttl):
         """ Set a key to value with given ttl. """
-
-        assert isinstance(key, basestring)
-        assert isinstance(value, basestring)
 
         self._cache[key] = value
         self._expires[key] = self.generate_expires(ttl)
