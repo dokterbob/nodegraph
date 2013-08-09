@@ -11,13 +11,12 @@ class Graph(object):
     """
 
     def __init__(self, name, store=None):
-        # Set name
+        # Check name
         assert isinstance(name, basestring)
-        self.name = name
 
-        # Initialize the store
+        # Initialize the store, passing the (immutable) graph name
         if not store:
-            self.store = GraphStore(graph=self)
+            self.store = GraphStore(graph_name=name)
 
         assert isinstance(self.store, GraphStore)
 
@@ -36,12 +35,33 @@ class Graph(object):
     def __hash__(self):
         return hash(self.key())
 
+    @property
+    def ttl(self):
+        """
+        Graph ttl storage wrapper.
+        """
+        return self.store.graph_ttl
+
+    @ttl.setter
+    def ttl(self, value):
+        assert isinstance(value, int)
+
+        self.store.graph_name = value
+
+    @property
+    def name(self):
+        """
+        Graph name storage wrapper
+        """
+        return self.store.graph_name
+
+
 class Node(object):
     """
     Named node in a graph.
     """
 
-    def __init__(self, graph, name):
+    def __init__(self, graph, name, ttl=None):
         # Set name
         assert isinstance(name, basestring)
         self.name = name
@@ -49,6 +69,10 @@ class Node(object):
         # Associate with graph
         assert isinstance(graph, Graph)
         self.graph = graph
+
+        # Set ttl explicitly when specified (otherwise Graph default is used)
+        if ttl:
+            self.ttl = ttl
 
         # Add oneself to graph
         self.graph.nodes.add(self)
@@ -62,6 +86,23 @@ class Node(object):
 
     def __hash__(self):
         return hash(self.key())
+
+    @property
+    def ttl(self):
+        """
+        Node ttl storage wrapper, returns explicitly set ttl or graph default.
+        """
+        return self.graph.store.node_ttl.get(self, self.graph.ttl)
+
+    @ttl.setter
+    def ttl(self, value):
+        assert isinstance(value, int)
+
+        self.graph.store.node_ttl[self] = value
+
+    @ttl.deleter
+    def ttl(self):
+        del self.graph.store.node_ttl[self]
 
     def get_total_score(self):
         """ Total score of all edges starting at this node. """
