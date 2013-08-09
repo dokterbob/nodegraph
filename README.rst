@@ -8,4 +8,7 @@ Perspectivist graph database.
 TODO
 ----
 #. Cache for get_score_out()
-#. Introduce Path weight.
+#. Edge.weight -> get_weight()
+#. Cache for Edge.get_weight()
+#. Introduce Path.get_weight()
+#. Cache for Path.get_weight()
