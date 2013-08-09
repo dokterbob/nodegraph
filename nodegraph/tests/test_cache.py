@@ -1,23 +1,10 @@
 import unittest
 
-from ..cache import GraphCache
+from .mixins import CacheTestMixin
 
 
-class TestGraphCache(unittest.TestCase):
+class TestGraphCache(CacheTestMixin, unittest.TestCase):
     """ Tests for GraphCache. """
-
-    def setUp(self):
-        """ Setup a cache by default with mock timer. """
-
-        # Initialize mock time
-        self.time = 0
-
-        def mock_timer():
-            """ Mock timer, simply returns static value `self.time`. """
-
-            return self.time
-
-        self.c = GraphCache(timer=mock_timer)
 
     def test_set_get(self):
         """ Test setting and getting a value in the cache. """

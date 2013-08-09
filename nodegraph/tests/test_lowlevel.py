@@ -2,7 +2,7 @@ import unittest
 
 from ..lowlevel import Graph, Node, Edge
 
-from .mixins import GraphTestMixin, NodeTestMixin, EdgeTestMixin
+from .mixins import GraphTestMixin, NodeTestMixin, EdgeTestMixin, CacheTestMixin
 
 
 class TestGraph(GraphTestMixin, unittest.TestCase):
@@ -57,14 +57,20 @@ class TestNode(NodeTestMixin, unittest.TestCase):
         self.n.get_score_out()
 
         # Test cache
-        self.assertEquals(self.g.store.cache.get((self.n, 'score')), 0)
-        self.assertTrue(self.g.store.cache.get_expires((self.n, 'score')))
+        self.assertEquals(self.g.store.cache.get((self.n, 'score_out')), 0)
+        self.assertTrue(self.g.store.cache.get_expires((self.n, 'score_out')))
 
         # Test overriding the cache
-        self.g.store.cache.set((self.n, 'score'), 5, 5)
+        self.g.store.cache.set((self.n, 'score_out'), 5, 5)
 
         # Now cached value should be returned
         self.assertEquals(self.n.get_score_out(), 5)
+
+    def test_get_min_ttl_out(self):
+        """ Test minimal ttl for outgoing Edges, should return Node ttl. """
+        self.n.ttl = 25
+
+        self.assertEquals(self.n.get_min_ttl_out(), 25)
 
     def test_hash(self):
         """ Test hashing for Node / equivalence of duplicates. """
@@ -180,11 +186,34 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.e.decrease_score()
         self.assertEquals(self.e.score, 0)
 
+    def test_get_min_ttl_out(self):
+        """
+        Test minimal ttl for outgoing Edges, should return least ttl of Edges.
+        """
+        # Single Edge
+        self.e.ttl = 7
+        self.assertEquals(self.n.get_min_ttl_out(), 7)
+
+        # Two Edges
+        n3 = Node(graph=self.g, name='node_3')
+        e2 = Edge(self.n, n3)
+        e2.ttl = 3
+
+        # Value should be cached for 7 seconds
+        self.assertEquals(self.n.get_min_ttl_out(), 7)
+
+        # Flush cache, expect results!
+        self.g.store.cache.flush()
+        self.assertEquals(self.n.get_min_ttl_out(), 3)
+
     def test_weight(self):
         """ Test weight for Graph with single Edge. """
 
         # Initially, no score has been assigned - hence no weight.
         self.assertAlmostEqual(self.e.get_weight(), 0.0)
+
+        # Explicitly flush the cache
+        self.g.store.cache.flush()
 
         # With score increased, weight should be 1.0
         self.e.increase_score()
@@ -228,6 +257,36 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         # 2/3 for self.e - 1/3 for e2
         self.assertAlmostEqual(self.e.get_weight(), 0.66666666)
         self.assertAlmostEqual(e2.get_weight(), 0.33333333)
+
+    def test_weight_cache(self):
+        """ Test caching for get_weight(). """
+        # Set some cache value
+        self.e.ttl = 5
+
+        # Make sure min_ttl reports right result
+        self.assertEquals(self.n.get_min_ttl_out(), 5)
+
+        # Populate the cache
+        self.assertAlmostEqual(self.e.get_weight(), 0.0)
+
+        # Test cache
+        self.assertEquals(self.g.store.cache.get((self.e, 'weight')), 0.0)
+        self.assertTrue(self.g.store.cache.get_expires((self.e, 'weight')))
+
+        # With score increased, weight should be 1.0 - but 0.0 still in cache
+        self.e.increase_score()
+
+        # Cache should not have changed
+        self.assertEquals(self.g.store.cache.get((self.e, 'weight')), 0.0)
+        self.assertTrue(self.g.store.cache.get_expires((self.e, 'weight')))
+
+        self.assertAlmostEqual(self.e.get_weight(), 0.0)
+
+        # Flush cache
+        self.g.store.cache.flush()
+
+        # New value propagated!
+        self.assertAlmostEqual(self.e.get_weight(), 1.0)
 
     def test_ttl(self):
         """ Test ttl behaviour for Edge. """

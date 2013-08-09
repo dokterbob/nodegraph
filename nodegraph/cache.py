@@ -14,11 +14,8 @@ class GraphCache(object):
         # Allow for pluggable timer, eases testing
         self.timer = timer
 
-        # Key -> value store
-        self._cache = {}
-
-        # Key -> Expiry dates
-        self._expires = {}
+        # Flush the cache
+        self.flush()
 
     def generate_expires(self, ttl):
         """ Generate expiration time using ttl. """
@@ -77,3 +74,12 @@ class GraphCache(object):
 
         # Key available
         return self._cache[key]
+
+    def flush(self):
+        """ Flush the cache """
+
+        # Key -> value store
+        self._cache = {}
+
+        # Key -> Expiry dates
+        self._expires = {}

@@ -1,3 +1,4 @@
+from ..cache import GraphCache
 from ..lowlevel import Graph, Node, Edge
 from ..highlevel import Path, Ensemble
 
@@ -9,6 +10,23 @@ class GraphTestMixin(object):
         super(GraphTestMixin, self).setUp()
 
         self.g = Graph(name='test_graph')
+
+
+class CacheTestMixin(GraphTestMixin):
+    """ Mixin using a mock time `self.time` for testing the cache. """
+    def setUp(self):
+        super(CacheTestMixin, self).setUp()
+
+        # Initialize mock time
+        self.time = 0
+
+        def mock_timer():
+            """ Mock timer, simply returns static value `self.time`. """
+
+            return self.time
+
+        self.c = GraphCache(timer=mock_timer)
+        self.g.store.cache = self.c
 
 
 class NodeTestMixin(GraphTestMixin):

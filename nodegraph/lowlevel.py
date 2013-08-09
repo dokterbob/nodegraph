@@ -103,11 +103,45 @@ class Node(object):
     def ttl(self):
         del self.graph.store.node_ttl[self]
 
+    def get_min_ttl_out(self):
+        """
+        Get the minimal ttl of all Edges pointing outward from this Node or
+        the Node's ttl if no Edges are available.
+        """
+
+        # Nice hashable tuple of self and 'score' identifier
+        cache_key = (self, 'min_ttl_out')
+
+        # Hit cache
+        cached = self.graph.store.cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        # No cache available -> calculate!
+        edges = self.graph.edges.from_node(self)
+
+        if edges:
+            # Calculate minimal Edge ttl and total Edge score
+            min_ttl = sys.maxint
+            for edge in edges:
+                if edge.ttl < min_ttl:
+                    min_ttl = edge.ttl
+
+            # Write to cache, using self.ttl as cache time
+            self.graph.store.cache.set(cache_key, min_ttl, self.ttl)
+
+        else:
+            # No Edges available to calculate score; use Node's ttl in which
+            # case caching is useless.
+            min_ttl = self.ttl
+
+        return min_ttl
+
     def get_score_out(self):
         """ Total score of all Edges pointing outward form this Node. """
 
         # Nice hashable tuple of self and 'score' identifier
-        cache_key = (self, 'score')
+        cache_key = (self, 'score_out')
 
         # Hit cache
         cached = self.graph.store.cache.get(cache_key)
@@ -119,21 +153,15 @@ class Node(object):
 
         total_score = 0
 
-        if edges:
-            # Calculate minimal Edge ttl and total Edge score
-            min_ttl = sys.maxint
-            for edge in edges:
-                if edge.ttl < min_ttl:
-                    min_ttl = edge.ttl
+        # Total Edge score
+        for edge in edges:
+            total_score += edge.score
 
-                total_score += edge.score
-        else:
-            # No Edges available to calculate score; do negative caching
-            # during Node default ttl.
-            min_ttl = self.ttl
+        # Get minimal ttl of outgoing Edges
+        ttl = self.get_min_ttl_out()
 
         # Write to cache
-        self.graph.store.cache.set(cache_key, total_score, min_ttl)
+        self.graph.store.cache.set(cache_key, total_score, ttl)
 
         return total_score
 
@@ -213,13 +241,27 @@ class Edge(object):
     def get_weight(self):
         """ Return the current weight. """
 
+        # Nice hashable tuple of self and identifier
+        cache_key = (self, 'weight')
+
+        # Hit cache
+        cached = self.graph.store.cache.get(cache_key)
+        if cached is not None:
+            return cached
+
         # No score, no weight: simple optimizations, prevents division by zero
-        if not self.score:
-            return 0.0
+        if self.score:
+            total_score = self.from_node.get_score_out()
+            assert total_score
 
-        total_score = self.from_node.get_score_out()
-        assert total_score
+            weight = self.score / float(total_score)
+        else:
+            weight = 0.0
 
-        weight = self.score / float(total_score)
+        # Get minimal outgoing ttl for Edges
+        ttl = self.from_node.get_min_ttl_out()
+
+        # Write to cache
+        self.graph.store.cache.set(cache_key, weight, ttl)
 
         return weight
