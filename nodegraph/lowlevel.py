@@ -210,8 +210,7 @@ class Edge(object):
     def score(self):
         del self.graph.store.edge_score[self]
 
-    @property
-    def weight(self):
+    def get_weight(self):
         """ Return the current weight. """
 
         # No score, no weight: simple optimizations, prevents division by zero

@@ -7,7 +7,6 @@ Perspectivist graph database.
 
 TODO
 ----
-#. Edge.weight -> get_weight()
 #. Cache for Edge.get_weight()
 #. Introduce Path.get_weight()
 #. Cache for Path.get_weight()

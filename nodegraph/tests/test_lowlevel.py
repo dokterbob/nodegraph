@@ -184,11 +184,11 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         """ Test weight for Graph with single Edge. """
 
         # Initially, no score has been assigned - hence no weight.
-        self.assertAlmostEqual(self.e.weight, 0.0)
+        self.assertAlmostEqual(self.e.get_weight(), 0.0)
 
         # With score increased, weight should be 1.0
         self.e.increase_score()
-        self.assertAlmostEqual(self.e.weight, 1.0)
+        self.assertAlmostEqual(self.e.get_weight(), 1.0)
 
     def test_multiweight(self):
         """ Test weight distribution for multiple Edges from `self.n`. """
@@ -205,8 +205,8 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEquals(self.n.get_score_out(), 200)
 
         # Equal weight distribution
-        self.assertAlmostEqual(self.e.weight, 0.5)
-        self.assertAlmostEqual(e2.weight, 0.5)
+        self.assertAlmostEqual(self.e.get_weight(), 0.5)
+        self.assertAlmostEqual(e2.get_weight(), 0.5)
 
     def test_multiweight_unequal(self):
         """
@@ -226,8 +226,8 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEquals(self.n.get_score_out(), 300)
 
         # 2/3 for self.e - 1/3 for e2
-        self.assertAlmostEqual(self.e.weight, 0.66666666)
-        self.assertAlmostEqual(e2.weight, 0.33333333)
+        self.assertAlmostEqual(self.e.get_weight(), 0.66666666)
+        self.assertAlmostEqual(e2.get_weight(), 0.33333333)
 
     def test_ttl(self):
         """ Test ttl behaviour for Edge. """
