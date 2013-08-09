@@ -11,12 +11,13 @@ class Graph(object):
     """
 
     def __init__(self, name, store=None):
-        # Check name
+        # Set (read-only) Graph name
         assert isinstance(name, basestring)
+        self._name = name
 
         # Initialize the store, passing the (immutable) graph name
         if not store:
-            self.store = GraphStore(graph_name=name)
+            self.store = GraphStore(name=self.name)
 
         assert isinstance(self.store, GraphStore)
 
@@ -53,7 +54,7 @@ class Graph(object):
         """
         Graph name storage wrapper
         """
-        return self.store.graph_name
+        return self._name
 
 
 class Node(object):

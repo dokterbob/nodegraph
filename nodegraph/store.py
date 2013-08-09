@@ -5,15 +5,15 @@ class GraphStore(object):
     The idea is to be able to have pluggable storage backends with the default
     (for now) being an in-memory store.
 
-    store = GraphStore(graph=...)
+    store = GraphStore(name=...)
     store.edges = ...
     store.nodes = ...
     store.scores[node] = ...
     """
 
-    def __init__(self, graph_name):
+    def __init__(self, name):
         # Graph TTL container
-        self.graph_name = graph_name
+        self.name = name
 
         # Set initial ttl to 0
         self.graph_ttl = 0
@@ -35,3 +35,13 @@ class GraphStore(object):
 
         # Create a dictionary for storing edge -> score pairs
         self.scores = {}
+
+    def key(self):
+        """ Key used for hashing and comparisons. """
+        return self.name
+
+    def __eq__(x, y):
+        return x.key() == y.key()
+
+    def __hash__(self):
+        return hash(self.key())
