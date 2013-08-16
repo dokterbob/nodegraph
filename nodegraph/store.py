@@ -21,6 +21,9 @@ class GraphStore(object):
         # Set initial ttl to 0
         self.graph_ttl = 0
 
+        # Set initial graph dampening to 0
+        self.path_dampening = 0.90
+
         # Create empty set for storage of nodes
         self.nodes = set()
 

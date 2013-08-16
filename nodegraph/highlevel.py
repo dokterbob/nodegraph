@@ -25,6 +25,9 @@ class Path(object):
         # Set graph
         self.graph = edges[0].graph
 
+        # Set path dampening from graph
+        self.dampening = self.graph.path_dampening
+
     def key(self):
         """ Key used for hashing and comparisons. """
         keys = [edge.key() for edge in self.edges]

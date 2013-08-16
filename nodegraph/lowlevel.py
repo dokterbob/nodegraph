@@ -52,6 +52,20 @@ class Graph(object):
         self.store.graph_ttl = value
 
     @property
+    def path_dampening(self):
+        """
+        Path dampening storage wrapper.
+        """
+        return self.store.path_dampening
+
+    @path_dampening.setter
+    def path_dampening(self, value):
+        assert isinstance(value, int)
+
+        self.store.path_dampening = value
+
+
+    @property
     def name(self):
         """
         Graph name storage wrapper
