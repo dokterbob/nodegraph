@@ -30,4 +30,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Utilities'
     ],
+    test_suite='nodegraph.tests'
 )
