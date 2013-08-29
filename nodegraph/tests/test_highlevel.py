@@ -85,7 +85,7 @@ class TestDualPath(DualPathTestMixin, unittest.TestCase):
         self.e2.increase_score()
 
         # Path weight should still be equal to 1.0*1.0*dampening
-        self.assertEqual(self.p2.get_weight(), self.p2.dampening)
+        self.assertEqual(self.p2.get_weight(), self.g.path_dampening)
 
 
 class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
@@ -105,7 +105,7 @@ class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
         self.e3.increase_score()
 
         # Path weight should still be equal to 1.0*1.0*1.0*dampening^2
-        self.assertAlmostEqual(self.p3.get_weight(), self.p3.dampening**2)
+        self.assertAlmostEqual(self.p3.get_weight(), self.g.path_dampening**2)
 
     def test_weight_unequal_score(self):
         """
@@ -143,7 +143,7 @@ class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
 
         # Assert Path weights
         self.assertAlmostEqual(
-            self.p3.get_weight(), self.p.dampening**2 * 2.0/3
+            self.p3.get_weight(), self.g.path_dampening**2 * 2.0/3
         )
 
         self.assertAlmostEqual(
