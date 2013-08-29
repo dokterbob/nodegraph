@@ -4,6 +4,9 @@ from .mixins import (
     TrivialPathTestMixin, DualPathTestMixin, ComplexPathTestMixin
 )
 
+from ..lowlevel import Edge, Node
+from ..highlevel import Path
+
 
 class TestTrivialPath(TrivialPathTestMixin, unittest.TestCase):
     """ Tests for a Path with single Edge. """
@@ -103,6 +106,49 @@ class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
 
         # Path weight should still be equal to 1.0*1.0*1.0*dampening^2
         self.assertAlmostEqual(self.p3.get_weight(), self.p3.dampening**2)
+
+    def test_weight_unequal_score(self):
+        """
+        Test weight with one Edge 'forking' the Path.
+
+        self.p3:      [ <self.n> -> <self.n2> -> <self.n3> ]
+        forking_path: [ <self.n> -> <forking_node> ]
+        """
+        forking_node = Node(graph=self.g, name='forking_node')
+        forking_edge = Edge(from_node=self.n, to_node=forking_node)
+        forking_path = Path([forking_edge])
+
+        # In the fork, have 1/3 of the weight go to the forking edge
+        forking_edge.increase_score()
+
+        self.e.increase_score()
+        self.e.increase_score()
+
+        self.e2.increase_score()
+        self.e3.increase_score()
+
+        # Assert Edge weights
+        self.assertAlmostEqual(
+            self.e.get_weight(), 2.0/3
+        )
+        self.assertAlmostEqual(
+            forking_edge.get_weight(), 1.0/3
+        )
+        self.assertAlmostEqual(
+            self.e2.get_weight(), 1.0
+        )
+        self.assertAlmostEqual(
+            self.e3.get_weight(), 1.0
+        )
+
+        # Assert Path weights
+        self.assertAlmostEqual(
+            self.p3.get_weight(), self.p.dampening**2 * 2.0/3
+        )
+
+        self.assertAlmostEqual(
+            forking_path.get_weight(), 1.0/3
+        )
 
 
 if __name__ == '__main__':
