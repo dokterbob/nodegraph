@@ -79,7 +79,6 @@ class Path(object):
         weight = 1.0
         for edge in self.edges:
             weight *= edge.get_weight()
-            print weight
 
         # Calculate dampening factor for number of steps *between* Edges
         edge_connection_count = len(self.edges) - 1
