@@ -141,6 +141,8 @@ class Node(object):
                 if edge.ttl < min_ttl:
                     min_ttl = edge.ttl
 
+            assert min_ttl != sys.maxint
+
             # Write to cache, using self.ttl as cache time
             self.graph.store.cache.set(cache_key, min_ttl, self.ttl)
 
