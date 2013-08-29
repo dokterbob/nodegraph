@@ -7,8 +7,10 @@ Perspectivist graph database.
 
 TODO
 ----
-#. Introduce Path.get_weight()
-#. Cache for Path.get_weight()
+#. Implement Ensemble datastructure (set of Paths).
+#. Implement weight for Ensembles.
+#. Implement cache for Ensemble weight.
+#. Construct Ensembles between any two Nodes.
 
 Running tests
 -------------
