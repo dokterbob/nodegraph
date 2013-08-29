@@ -255,8 +255,9 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEquals(self.n.get_score_out(), 300)
 
         # 2/3 for self.e - 1/3 for e2
-        self.assertAlmostEqual(self.e.get_weight(), 0.66666666)
-        self.assertAlmostEqual(e2.get_weight(), 0.33333333)
+        self.assertAlmostEqual(self.e.get_weight() + e2.get_weight(), 1.0)
+        self.assertAlmostEqual(self.e.get_weight(), 2.0/3)
+        self.assertAlmostEqual(e2.get_weight(), 1.0/3)
 
     def test_weight_cache(self):
         """ Test caching for get_weight(). """
