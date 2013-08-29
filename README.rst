@@ -7,10 +7,10 @@ Perspectivist graph database.
 
 TODO
 ----
-#. Implement Ensemble datastructure (set of Paths).
-#. Implement weight for Ensembles.
+#. Write tests for Ensemble weight.
 #. Implement cache for Ensemble weight.
 #. Construct Ensembles between any two Nodes.
+#. Factor out common caching code to decorator.
 
 Running tests
 -------------
