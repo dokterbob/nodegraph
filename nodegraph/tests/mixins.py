@@ -48,10 +48,39 @@ class EdgeTestMixin(NodeTestMixin):
         self.e = Edge(from_node=self.n, to_node=self.n2)
 
 
-class PathTestMixin(EdgeTestMixin):
+class TrivialPathTestMixin(EdgeTestMixin):
     """ Mixin for tests depending on a Path `self.p` to be available. """
 
     def setUp(self):
-        super(PathTestMixin, self).setUp()
+        super(TrivialPathTestMixin, self).setUp()
 
         self.p = Path(edges=[self.e])
+
+
+class DualPathTestMixin(TrivialPathTestMixin):
+    """
+    Mixin for tests depending on a Path `self.p2` with a second Edge `self.e2`.
+    """
+
+    def setUp(self):
+        super(DualPathTestMixin, self).setUp()
+
+        self.n3 = Node(graph=self.g, name='test_node_3')
+        self.e2 = Edge(from_node=self.n2, to_node=self.n3)
+
+        self.p2 = Path(edges=[self.e, self.e2])
+
+
+class ComplexPathTestMixin(DualPathTestMixin):
+    """
+    Mixin for tests depending on (at least) a Path `self.p3` with a third Edge
+    `self.e3`.
+    """
+
+    def setUp(self):
+        super(ComplexPathTestMixin, self).setUp()
+
+        self.n4 = Node(graph=self.g, name='test_node_4')
+        self.e3 = Edge(from_node=self.n3, to_node=self.n4)
+
+        self.p3 = Path(edges=[self.e, self.e2, self.e3])

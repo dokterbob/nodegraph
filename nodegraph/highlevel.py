@@ -82,7 +82,8 @@ class Path(object):
             print weight
 
         # Calculate dampening factor for number of steps *between* Edges
-        dampening_factor = self.dampening ** (len(self.edges) - 1)
+        edge_connection_count = len(self.edges) - 1
+        dampening_factor = self.dampening ** edge_connection_count
         weight *= dampening_factor
 
         # Get minimal outgoing ttl for Edges
