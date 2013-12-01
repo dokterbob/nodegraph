@@ -43,6 +43,9 @@ class Path(object):
     def __hash__(self):
         return hash(self.key())
 
+    def __repr__(self):
+        return '<Path {0}>'.format(self.edges)
+
     def get_ttl(self):
         """
         Returns the path ttl, which is the minimum of all the path's
@@ -138,6 +141,9 @@ class Ensemble(object):
 
     def __hash__(self):
         return hash(self.key())
+
+    def __repr__(self):
+        return '<Ensemble {0}>'.format(self.paths)
 
     def get_ttl(self):
         """
