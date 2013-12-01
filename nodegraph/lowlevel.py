@@ -1,6 +1,6 @@
 import sys
 
-from .managers import EdgeManager, NodeManager, PathManager
+from .managers import EdgeManager, NodeManager, PathManager, EnsembleManager
 
 from .store import GraphStore
 
@@ -27,6 +27,7 @@ class Graph(object):
         self.edges = EdgeManager(graph=self)
         self.nodes = NodeManager(graph=self)
         self.paths = PathManager(graph=self)
+        self.ensembles = EnsembleManager(graph=self)
 
     def key(self):
         """ Key used for hashing and comparisons. """

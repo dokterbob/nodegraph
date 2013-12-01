@@ -220,5 +220,17 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
         self.assertAlmostEqual(self.es.get_weight(), 1.0)
 
 
+class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
+    def test_get_simple(self):
+        """ Test get() of EnsembleManager with simple Graph. """
+        paths = self.g.ensembles.get(self.n, self.n2)
+        self.assertEquals(paths, set([]))
+
+        self.e.increase_score()
+
+        paths = self.g.ensembles.get(self.n, self.n2)
+        self.assertEquals(paths, set([self.p]))
+
+
 if __name__ == '__main__':
     unittest.main()

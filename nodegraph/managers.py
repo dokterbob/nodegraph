@@ -116,3 +116,17 @@ class PathManager(object):
 
     def __init__(self, graph):
         self.graph = graph
+
+
+class EnsembleManager(object):
+    """ Manager for Ensembles in a Graph. """
+
+    def __init__(self, graph):
+        self.graph = graph
+
+    def get(self, from_node, to_node):
+        """ Return the Ensemble of paths from from_node tot to_node. """
+
+        self.paths = set()
+
+        return self.paths
