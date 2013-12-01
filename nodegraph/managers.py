@@ -151,11 +151,13 @@ class EnsembleManager(object):
 
         # Recurse to connected elements
         for edge in self.graph.edges.from_node(from_node):
-            ensemble = self.get(edge.to_node, to_node)
+            # Only recurse when the initial Edge has weight
+            if edge.get_weight():
+                ensemble = self.get(edge.to_node, to_node)
 
-            # Create non-trivial paths
-            for path in ensemble.paths:
-                new_path = Path([edge]+path.edges)
-                paths.add(new_path)
+                # Create non-trivial paths
+                for path in ensemble.paths:
+                    new_path = Path([edge]+path.edges)
+                    paths.add(new_path)
 
         return Ensemble(paths)
