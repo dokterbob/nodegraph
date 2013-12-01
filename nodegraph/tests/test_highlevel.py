@@ -221,6 +221,8 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
 
 
 class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
+    """ Test Ensemble Manager methods. """
+
     def test_get_simple(self):
         """ Test get() of EnsembleManager with simple Graph. """
         self.e.increase_score()
