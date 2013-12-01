@@ -16,11 +16,15 @@ class Path(object):
             for edge in edges:
                 # They should all be edges
                 if not isinstance(edge, Edge):
-                    raise AssertionError
+                    raise AssertionError('%s is not an Edge' % edge)
 
                 # All should have same graph
                 if not edge.graph == edges[0].graph:
-                    raise AssertionError
+                    raise AssertionError('Edges on different graphs.')
+
+        # From node and to node
+        self.from_node = edges[0].from_node
+        self.to_node = edges[-1].to_node
 
         # Store Edges on object
         self.edges = edges
@@ -115,6 +119,8 @@ class Ensemble(object):
         # Set graph from first path
         for path in paths:
             self.graph = path.graph
+            self.from_node = path.from_node
+            self.to_node = path.to_node
 
             break
 
@@ -123,10 +129,26 @@ class Ensemble(object):
         if __debug__:
             for path in paths:
                 if not isinstance(path, Path):
-                    raise AssertionError
+                    raise AssertionError('{0} is not a Path.'.format(path))
 
                 if not self.graph is path.graph:
-                    raise AssertionError
+                    raise AssertionError('Path is on a different Graph.')
+
+                if not self.from_node is path.from_node:
+                    raise AssertionError(
+                        'From node should be the same for all Paths.'
+                        'Ensemble: {0} Path: {1}'.format(
+                            self.from_node, path.from_node
+                        )
+                    )
+
+                if not self.to_node is path.to_node:
+                    raise AssertionError(
+                        'To node should be the same for all Paths.'
+                        'Ensemble: {0} Path: {1}'.format(
+                            self.to_node, path.to_node
+                        )
+                    )
 
         self.paths = set(paths)
 

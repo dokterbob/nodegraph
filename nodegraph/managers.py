@@ -136,6 +136,9 @@ class EnsembleManager(object):
         try:
             edge = self.graph.edges.get(from_node, to_node)
 
+            assert edge.from_node == from_node
+            assert edge.to_node == to_node
+
             path = Path([edge])
             paths.add(path)
         except EdgeNotFound:
