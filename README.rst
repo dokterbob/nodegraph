@@ -7,7 +7,6 @@ Perspectivist graph database.
 
 TODO
 ----
-#. Construct Ensembles between any two Nodes.
 #. Refactor highlevel/lowlevel distinction.
 #. Refactor test organization.
 #. Factor out common caching code to decorator.
