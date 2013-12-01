@@ -223,12 +223,30 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
 class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
     """ Test Ensemble Manager methods. """
 
-    def test_get_simple(self):
+    def test_get_single(self):
         """ Test get() of EnsembleManager with simple Graph. """
-        self.e.increase_score()
 
-        paths = self.g.ensembles.get(self.n, self.n2)
-        self.assertEquals(paths, set([self.p]))
+        ensemble = self.g.ensembles.get(self.n, self.n2)
+
+        self.assertEquals(ensemble.paths, set([self.p]))
+        self.assertEquals(ensemble, self.es)
+
+    def test_get_two(self):
+        """ Test get() of EnsembleManager with path involving two edges. """
+
+        ensemble = self.g.ensembles.get(self.n, self.n3)
+
+        self.assertEquals(ensemble.paths, set([self.p2]))
+        self.assertEquals(ensemble, self.es2)
+
+    def test_get_three(self):
+        """ Test get() of EnsembleManager with path involving three edges. """
+
+        ensemble = self.g.ensembles.get(self.n, self.n3)
+
+        self.assertEquals(ensemble.paths, set([self.p3]))
+        self.assertEquals(ensemble, self.es3)
+
 
 
 if __name__ == '__main__':

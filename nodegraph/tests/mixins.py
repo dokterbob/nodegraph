@@ -90,12 +90,13 @@ class EnsembleTestMixin(ComplexPathTestMixin):
     """
     Mixin for tests expecting:
 
-        * self.p -> [self.e]
-        * self.p2 -> [self.e, self.e2]
-        * self.p3 -> [self.e, self.e2, self.e3]
         * self.e -> [self.n, self.n2]
         * self.e2 -> [self.n2, self.n3]
         * self.e3 -> [self.n3, self.n4]
+
+        * self.p -> [self.e]
+        * self.p2 -> [self.e, self.e2]
+        * self.p3 -> [self.e, self.e2, self.e3]
 
         * self.es -> [self.p]
         * self.es2 -> [self.p, self.p2]

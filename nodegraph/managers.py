@@ -128,7 +128,7 @@ class EnsembleManager(object):
     def get(self, from_node, to_node):
         """ Return the Ensemble of paths from from_node tot to_node. """
 
-        from .highlevel import Path
+        from .highlevel import Path, Ensemble
 
         paths = set()
 
@@ -144,11 +144,11 @@ class EnsembleManager(object):
 
         # Recurse to connected elements
         for edge in self.graph.edges.from_node(from_node):
-            branch_paths = self.get(edge.to_node, to_node)
+            ensemble = self.get(edge.to_node, to_node)
 
             # Create non-trivial paths
-            for path in branch_paths:
+            for path in ensemble.paths:
                 new_path = Path([edge]+path.edges)
                 paths.add(new_path)
 
-        return paths
+        return Ensemble(paths)

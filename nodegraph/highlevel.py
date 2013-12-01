@@ -128,7 +128,7 @@ class Ensemble(object):
                 if not self.graph is path.graph:
                     raise AssertionError
 
-        self.paths = paths
+        self.paths = set(paths)
 
     def key(self):
         """ Key used for hashing and comparisons. """
