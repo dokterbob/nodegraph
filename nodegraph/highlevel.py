@@ -109,6 +109,12 @@ class Ensemble(object):
     """
 
     def __init__(self, paths=set()):
+        # Set graph from first path
+        for path in paths:
+            self.graph = path.graph
+
+            break
+
         # This is equivalent to the assert statement, see:
         # http://docs.python.org/2/reference/simple_stmts.html#the-assert-statement
         if __debug__:
@@ -116,11 +122,14 @@ class Ensemble(object):
                 if not isinstance(path, Path):
                     raise AssertionError
 
+                if not self.graph is path.graph:
+                    raise AssertionError
+
         self.paths = paths
 
     def key(self):
         """ Key used for hashing and comparisons. """
-        keys = [path.key() for path in path.edges]
+        keys = [path.key() for path in self.paths]
 
         return tuple(keys)
 
