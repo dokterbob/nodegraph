@@ -39,7 +39,9 @@ class TestNode(NodeTestMixin, unittest.TestCase):
     def test_init(self):
         """ Test created Node. """
         self.assertEquals(self.n.ttl, 0)
-        self.assertEquals(set([self.n]), self.g.nodes.all())
+        self.assertEquals(
+            set([self.n, self.n2, self.n3, self.n4]), self.g.nodes.all()
+        )
         self.assertEquals(set([]), self.g.edges.all())
 
     def test_get_score_out(self):
@@ -121,7 +123,10 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
     def test_init(self):
         """ Test created Edge. """
         self.assertEquals(self.e.ttl, 0)
-        self.assertEquals(set([self.n, self.n2]), self.g.nodes.all())
+        self.assertEquals(
+            set([self.n, self.n2, self.n3, self.n4]),
+            self.g.nodes.all()
+        )
         self.assertEquals(set([self.e]), self.g.edges.all())
 
     def test_duplicate(self):
