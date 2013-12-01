@@ -188,6 +188,37 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
             self.p.get_weight() + self.p2.get_weight() + self.p3.get_weight()
         )
 
+    def test_weight_cache(self):
+        """ Test caching for get_weight(). """
+
+        # Set some cache value
+        self.e.ttl = 5
+
+        # Test ttl
+        self.assertEquals(self.es.get_ttl(), 5)
+
+        # Populate the cache
+        self.assertAlmostEquals(self.es.get_weight(), 0.0)
+
+        # Test cache
+        self.assertEquals(self.g.store.cache.get((self.es, 'weight')), 0.0)
+        self.assertTrue(self.g.store.cache.get_expires((self.es, 'weight')))
+
+        # With score increased, weight should be 1.0 - but 0.0 still in cache
+        self.e.increase_score()
+
+        # Cache should not have changed
+        self.assertEquals(self.g.store.cache.get((self.es, 'weight')), 0.0)
+        self.assertTrue(self.g.store.cache.get_expires((self.es, 'weight')))
+
+        self.assertAlmostEqual(self.es.get_weight(), 0.0)
+
+        # Flush cache
+        self.g.store.cache.flush()
+
+        # New value propagated!
+        self.assertAlmostEqual(self.es.get_weight(), 1.0)
+
 
 if __name__ == '__main__':
     unittest.main()

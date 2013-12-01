@@ -7,7 +7,6 @@ Perspectivist graph database.
 
 TODO
 ----
-#. Implement cache for Ensemble weight.
 #. Construct Ensembles between any two Nodes.
 #. Factor out common caching code to decorator.
 
