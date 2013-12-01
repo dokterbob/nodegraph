@@ -168,6 +168,25 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
         self.e.increase_score()
 
         self.assertEquals(self.es.get_weight(), 1.0)
+        self.assertEquals(self.es.get_weight(), self.p.get_weight())
+
+    def test_weight_sum(self):
+        """
+        Test a composite weight of a collection of paths.
+        """
+        self.e.increase_score(10)
+        self.e2.increase_score(5)
+        self.e3.increase_score(15)
+
+        self.assertEquals(self.es.get_weight(), self.p.get_weight())
+
+        self.assertEquals(self.es2.get_weight(),
+            self.p.get_weight() + self.p2.get_weight()
+        )
+
+        self.assertEquals(self.es3.get_weight(),
+            self.p.get_weight() + self.p2.get_weight() + self.p3.get_weight()
+        )
 
 
 if __name__ == '__main__':
