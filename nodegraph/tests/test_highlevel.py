@@ -1,7 +1,8 @@
 import unittest
 
 from .mixins import (
-    TrivialPathTestMixin, DualPathTestMixin, ComplexPathTestMixin
+    TrivialPathTestMixin, DualPathTestMixin, ComplexPathTestMixin,
+    TrivialEnsembleTestMixin
 )
 
 from ..lowlevel import Edge, Node
@@ -149,6 +150,24 @@ class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
         self.assertAlmostEqual(
             forking_path.get_weight(), 1.0/3
         )
+
+
+class TestTrivialEnsemble(TrivialEnsembleTestMixin, unittest.TestCase):
+    """ Test Ensemble weight. """
+
+    def test_weight_initial(self):
+        """ Test initial weight. """
+
+        # Initial weight should be 0.0
+        self.assertEqual(self.es.get_weight(), 0.0)
+
+    def test_weight_simple(self):
+        """
+        Increase the score for Edge and ascertain result in path weight.
+        """
+        self.e.increase_score()
+
+        self.assertEquals(self.es.get_weight(), 1.0)
 
 
 if __name__ == '__main__':

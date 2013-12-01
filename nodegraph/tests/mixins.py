@@ -57,6 +57,15 @@ class TrivialPathTestMixin(EdgeTestMixin):
         self.p = Path(edges=[self.e])
 
 
+class TrivialEnsembleTestMixin(TrivialPathTestMixin):
+    """ Mixin for tests depending on Ensemble `self.es` to be available. """
+
+    def setUp(self):
+        super(TrivialEnsembleTestMixin, self).setUp()
+
+        self.es = Ensemble([self.p])
+
+
 class DualPathTestMixin(TrivialPathTestMixin):
     """
     Mixin for tests depending on a Path `self.p2` with a second Edge `self.e2`.
