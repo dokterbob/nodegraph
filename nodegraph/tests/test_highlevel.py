@@ -253,6 +253,16 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
         )
         self.assertEquals(ensemble, self.es2)
 
+    def test_recursion(self):
+        """ Test whether recursion is appropriately prevented. """
+
+        self.e4 = Edge(self.n2, self.n)
+
+        self.e.increase_score()
+        self.e4.increase_score()
+
+        ensemble = self.g.ensembles.get(self.n, self.n2)
+
 
 if __name__ == '__main__':
     unittest.main()
