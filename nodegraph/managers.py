@@ -101,11 +101,12 @@ class EdgeManager(object):
         from_nodes = self.from_node(from_node)
         to_nodes = self.to_node(to_node)
 
-        edges = from_nodes.union(to_nodes)
+        edges = from_nodes.intersection(to_nodes)
 
         if not edges:
             raise EdgeNotFound(from_node=from_node, to_node=to_node)
 
+        # There can only ever be one edge connecting two nodes
         assert len(edges) == 1
 
         return edges.pop()
@@ -127,6 +128,27 @@ class EnsembleManager(object):
     def get(self, from_node, to_node):
         """ Return the Ensemble of paths from from_node tot to_node. """
 
-        self.paths = set()
+        from .highlevel import Path
 
-        return self.paths
+        paths = set()
+
+        # Look for direct connections
+        try:
+            edge = self.graph.edges.get(from_node, to_node)
+
+            path = Path([edge])
+            paths.add(path)
+        except EdgeNotFound:
+            # No worries
+            pass
+
+        # Recurse to connected elements
+        for edge in self.graph.edges.from_node(from_node):
+            branch_paths = self.get(edge.to_node, to_node)
+
+            # Create non-trivial paths
+            for path in branch_paths:
+                new_path = Path([edge]+path.edges)
+                paths.add(new_path)
+
+        return paths

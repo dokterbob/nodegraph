@@ -223,9 +223,6 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
 class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
     def test_get_simple(self):
         """ Test get() of EnsembleManager with simple Graph. """
-        paths = self.g.ensembles.get(self.n, self.n2)
-        self.assertEquals(paths, set([]))
-
         self.e.increase_score()
 
         paths = self.g.ensembles.get(self.n, self.n2)
