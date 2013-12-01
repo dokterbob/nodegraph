@@ -2,7 +2,7 @@ import unittest
 
 from ..lowlevel import Graph, Node, Edge
 
-from .mixins import GraphTestMixin, NodeTestMixin, EdgeTestMixin, CacheTestMixin
+from .mixins import GraphTestMixin, NodeTestMixin, EdgeTestMixin, DualPathTestMixin
 
 
 class TestGraph(GraphTestMixin, unittest.TestCase):
@@ -307,6 +307,47 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         # When overridden, it should stay persistent
         self.e.ttl = 10
         self.assertEquals(self.e.ttl, 10)
+
+
+class TestEdgeManager(DualPathTestMixin, unittest.TestCase):
+    """ Test methods for EdgeManager. """
+
+    def test_get(self):
+        """ Test get() """
+        self.assertEquals(
+            self.g.edges.get(self.n, self.n2), self.e
+        )
+
+    def test_all(self):
+        """ Test all() """
+
+        self.assertEquals(
+            self.g.edges.all(), set([
+                self.e, self.e2
+            ])
+        )
+
+    def test_from(self):
+        """ Test from() """
+
+        self.assertEquals(
+            self.g.edges.from_node(self.n), set([self.e])
+        )
+
+        self.assertEquals(
+            self.g.edges.from_node(self.n2), set([self.e2])
+        )
+
+    def test_to(self):
+        """ Test to() """
+
+        self.assertEquals(
+            self.g.edges.to_node(self.n2), set([self.e])
+        )
+
+        self.assertEquals(
+            self.g.edges.to_node(self.n3), set([self.e2])
+        )
 
 
 if __name__ == '__main__':
