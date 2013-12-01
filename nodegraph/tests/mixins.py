@@ -86,10 +86,25 @@ class ComplexPathTestMixin(DualPathTestMixin):
         self.p3 = Path(edges=[self.e, self.e2, self.e3])
 
 
-class TrivialEnsembleTestMixin(TrivialPathTestMixin):
-    """ Mixin for tests depending on Ensemble `self.es` to be available. """
+class EnsembleTestMixin(ComplexPathTestMixin):
+    """
+    Mixin for tests expecting:
 
+        * self.p -> [self.e]
+        * self.p2 -> [self.e, self.e2]
+        * self.p3 -> [self.e, self.e2, self.e3]
+        * self.e -> [self.n, self.n2]
+        * self.e2 -> [self.n2, self.n3]
+        * self.e3 -> [self.n3, self.n4]
+
+        * self.es -> [self.p]
+        * self.es2 -> [self.p, self.p2]
+        * self.es3 -> [self.p, self.p2, self.p3]
+    """
     def setUp(self):
-        super(TrivialEnsembleTestMixin, self).setUp()
+        super(EnsembleTestMixin, self).setUp()
 
         self.es = Ensemble([self.p])
+        self.es2 = Ensemble([self.p, self.p2])
+        self.es3 = Ensemble([self.p, self.p2, self.p3])
+

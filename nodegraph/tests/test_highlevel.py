@@ -2,7 +2,7 @@ import unittest
 
 from .mixins import (
     TrivialPathTestMixin, DualPathTestMixin, ComplexPathTestMixin,
-    TrivialEnsembleTestMixin
+    EnsembleTestMixin
 )
 
 from ..lowlevel import Edge, Node
@@ -152,7 +152,7 @@ class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
         )
 
 
-class TestTrivialEnsemble(TrivialEnsembleTestMixin, unittest.TestCase):
+class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
     """ Test Ensemble weight. """
 
     def test_weight_initial(self):
