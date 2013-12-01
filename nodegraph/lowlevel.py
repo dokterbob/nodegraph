@@ -101,6 +101,9 @@ class Node(object):
     def __hash__(self):
         return hash(self.key())
 
+    def __repr__(self):
+        return '<Node {0}>'.format(self.name)
+
     @property
     def ttl(self):
         """
@@ -224,6 +227,11 @@ class Edge(object):
 
     def __hash__(self):
         return hash(self.key())
+
+    def __repr__(self):
+        return "<Edge {0}, {1}>".format(
+            self.from_node.name, self.to_node.name
+        )
 
     @property
     def ttl(self):
