@@ -7,9 +7,11 @@ Perspectivist graph database.
 
 TODO
 ----
+#. Factor out common caching code to decorator.
 #. Refactor highlevel/lowlevel distinction.
 #. Refactor test organization.
-#. Factor out common caching code to decorator.
+#. Pickle storage backend.
+#. Redish storage backgend.
 
 Running tests
 -------------
