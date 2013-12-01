@@ -181,11 +181,7 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
         self.assertEquals(self.es.get_weight(), self.p.get_weight())
 
         self.assertEquals(self.es2.get_weight(),
-            self.p.get_weight() + self.p2.get_weight()
-        )
-
-        self.assertEquals(self.es3.get_weight(),
-            self.p.get_weight() + self.p2.get_weight() + self.p3.get_weight()
+            self.p2.get_weight() + self.p3.get_weight()
         )
 
     def test_weight_cache(self):
@@ -193,6 +189,7 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
 
         # Set some cache value
         self.e.ttl = 5
+        self.e2.ttl = 5
 
         # Test ttl
         self.assertEquals(self.es.get_ttl(), 5)
@@ -224,29 +221,24 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
     """ Test Ensemble Manager methods. """
 
     def test_get_single(self):
-        """ Test get() of EnsembleManager with simple Graph. """
+        """ Test get() for trivial Path. """
 
         ensemble = self.g.ensembles.get(self.n, self.n2)
 
-        self.assertEquals(ensemble.paths, set([self.p]))
+        self.assertEquals(
+            ensemble.paths, set([self.p])
+        )
         self.assertEquals(ensemble, self.es)
 
     def test_get_two(self):
-        """ Test get() of EnsembleManager with path involving two edges. """
+        """ Test get() for degenerate Path (multiple routes). """
 
         ensemble = self.g.ensembles.get(self.n, self.n3)
 
-        self.assertEquals(ensemble.paths, set([self.p2]))
+        self.assertEquals(
+            ensemble.paths, set([self.p2, self.p3])
+        )
         self.assertEquals(ensemble, self.es2)
-
-    def test_get_three(self):
-        """ Test get() of EnsembleManager with path involving three edges. """
-
-        ensemble = self.g.ensembles.get(self.n, self.n3)
-
-        self.assertEquals(ensemble.paths, set([self.p3]))
-        self.assertEquals(ensemble, self.es3)
-
 
 
 if __name__ == '__main__':
