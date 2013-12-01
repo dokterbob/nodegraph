@@ -7,6 +7,7 @@ Perspectivist graph database.
 
 TODO
 ----
+#. Prevent recursion through cutoff for ensemble queries.
 #. Factor out common caching code to decorator.
 #. Refactor highlevel/lowlevel distinction.
 #. Refactor test organization.
