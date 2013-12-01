@@ -196,6 +196,8 @@ class Edge(object):
         # Initialize properties
         assert isinstance(from_node, Node)
         assert isinstance(to_node, Node)
+        assert from_node is not to_node, 'From node to node are the same.'
+
         self.from_node = from_node
         self.to_node = to_node
 
