@@ -140,7 +140,11 @@ class EnsembleManager(object):
             assert edge.to_node == to_node
 
             path = Path([edge])
-            paths.add(path)
+
+            # Add if it has weight
+            if path.get_weight():
+                paths.add(path)
+
         except EdgeNotFound:
             # No worries
             pass

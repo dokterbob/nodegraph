@@ -220,8 +220,17 @@ class TestEnsemble(EnsembleTestMixin, unittest.TestCase):
 class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
     """ Test Ensemble Manager methods. """
 
+    def test_get_none(self):
+        """ Without score, no paths should be returned. """
+
+        ensemble = self.g.ensembles.get(self.n, self.n2)
+
+        self.assertEquals(ensemble.paths, set())
+
     def test_get_single(self):
         """ Test get() for trivial Path. """
+
+        self.e.increase_score()
 
         ensemble = self.g.ensembles.get(self.n, self.n2)
 
@@ -232,6 +241,10 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
 
     def test_get_two(self):
         """ Test get() for degenerate Path (multiple routes). """
+
+        self.e.increase_score()
+        self.e2.increase_score()
+        self.e3.increase_score()
 
         ensemble = self.g.ensembles.get(self.n, self.n3)
 
