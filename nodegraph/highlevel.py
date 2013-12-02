@@ -152,6 +152,8 @@ class Ensemble(object):
 
         self.paths = set(paths)
 
+
+
     def key(self):
         """ Key used for hashing and comparisons. """
         keys = [path.key() for path in self.paths]

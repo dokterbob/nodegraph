@@ -65,6 +65,18 @@ class Graph(object):
 
         self.store.path_dampening = value
 
+    @property
+    def ensemble_weight_cutoff(self):
+        """
+        Path dampening storage wrapper.
+        """
+        return self.store.ensemble_weight_cutoff
+
+    @ensemble_weight_cutoff.setter
+    def ensemble_weight_cutoff(self, value):
+        assert isinstance(value, float)
+
+        self.store.ensemble_weight_cutoff = value
 
     @property
     def name(self):

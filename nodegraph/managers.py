@@ -128,25 +128,31 @@ class EnsembleManager(object):
     def get(self, from_node, to_node):
         """ Return the Ensemble of paths from from_node tot to_node. """
 
+        assert from_node is not to_node, 'From node and to node are the same'
+
         from .highlevel import Path, Ensemble
 
         paths = set()
 
         for edge in self.graph.edges.from_node(from_node):
             # Only process when the initial Edge has weight
-            if edge.get_weight():
+            if edge.get_weight() > self.graph.ensemble_weight_cutoff:
 
                 if edge.to_node == to_node:
                     # This is a direct connection, create and add Path
                     path = Path([edge])
                     paths.add(path)
 
-                # Recurse further
-                ensemble = self.get(edge.to_node, to_node)
+                else:
+                    # Recurse further
+                    ensemble = self.get(edge.to_node, to_node)
 
-                # Create non-trivial paths
-                for path in ensemble.paths:
-                    new_path = Path([edge]+path.edges)
-                    paths.add(new_path)
+                    # Create non-trivial paths
+                    for path in ensemble.paths:
+                        new_path = Path([edge]+path.edges)
+
+                        # Only consider paths with weight
+                        if new_path.get_weight() > self.graph.ensemble_weight_cutoff:
+                            paths.add(new_path)
 
         return Ensemble(paths)

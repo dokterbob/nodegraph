@@ -24,6 +24,9 @@ class GraphStore(object):
         # Set initial graph dampening to 0
         self.path_dampening = 0.90
 
+        # Set initial recursion weight cutoff for ensembles
+        self.ensemble_weight_cutoff = 0.10
+
         # Create empty set for storage of nodes
         self.nodes = set()
 

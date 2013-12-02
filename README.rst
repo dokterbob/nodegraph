@@ -8,7 +8,7 @@ WARNING: API highly in flux - not anywhere near production-ready.
 
 TODO
 ----
-*. Prevent recursion through cutoff for ensemble queries.
+*. Tests for recursion cutoff.
 *. Factor out common caching code to decorator.
 *. Refactor highlevel/lowlevel distinction.
 *. Refactor test organization.
