@@ -68,7 +68,7 @@ class Graph(object):
     @property
     def ensemble_weight_cutoff(self):
         """
-        Path dampening storage wrapper.
+        Recursion weight cutoff for ensembles.
         """
         return self.store.ensemble_weight_cutoff
 
@@ -77,6 +77,19 @@ class Graph(object):
         assert isinstance(value, float)
 
         self.store.ensemble_weight_cutoff = value
+
+    @property
+    def ensemble_max_recursion(self):
+        """
+        Maximum iteration depth for ensemble recursion.
+        """
+        return self.store.ensemble_max_recursion
+
+    @ensemble_max_recursion.setter
+    def ensemble_max_recursion(self, value):
+        assert isinstance(value, int)
+
+        self.store.ensemble_max_recursion = value
 
     @property
     def name(self):

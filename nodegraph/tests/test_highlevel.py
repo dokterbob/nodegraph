@@ -253,7 +253,7 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
         )
         self.assertEquals(ensemble, self.es2)
 
-    def test_recursion(self):
+    def test_recursion_cutoff(self):
         """ Test whether recursion is appropriately prevented. """
 
         self.e4 = Edge(self.n2, self.n)
@@ -265,6 +265,21 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
 
         # Note: there is an asymptote here around 5.2631578947324655
         self.assertAlmostEqual(ensemble.get_weight(), 5.3, places=1)
+
+    def test_max_recursion(self):
+        """ Test maximum recursion cutoff. """
+
+        self.e4 = Edge(self.n2, self.n)
+
+        self.e.increase_score()
+        self.e4.increase_score()
+
+        # Test results at maximum depth
+        self.g.ensemble_max_recursion = 40
+
+        ensemble = self.g.ensembles.get(self.n, self.n2)
+
+        self.assertAlmostEqual(ensemble.get_weight(), 5.2, places=1)
 
 
 if __name__ == '__main__':

@@ -27,6 +27,9 @@ class GraphStore(object):
         # Set initial recursion weight cutoff for ensembles
         self.ensemble_weight_cutoff = 0.001
 
+        # Maximum iteration depth for ensemble recursion
+        self.ensemble_max_recursion = 100
+
         # Create empty set for storage of nodes
         self.nodes = set()
 

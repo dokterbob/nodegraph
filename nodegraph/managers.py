@@ -128,8 +128,6 @@ class EnsembleManager(object):
     def get(self, from_node, to_node, prepend_path=None):
         """ Return the Ensemble of paths from from_node tot to_node. """
 
-        # assert from_node is not to_node, 'From node and to node are the same'
-
         from .highlevel import Path, Ensemble
 
         paths = set()
@@ -148,10 +146,11 @@ class EnsembleManager(object):
                     paths.add(new_path)
 
                 # Recurse further
-                ensemble = self.get(new_path.to_node, to_node, new_path)
+                if len(new_path.edges) <= self.graph.ensemble_max_recursion:
+                    ensemble = self.get(new_path.to_node, to_node, new_path)
 
-                # Create non-trivial paths
-                for path in ensemble.paths:
-                    paths.add(path)
+                    # Create non-trivial paths
+                    for path in ensemble.paths:
+                        paths.add(path)
 
         return Ensemble(paths)
