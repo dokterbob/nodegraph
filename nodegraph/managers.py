@@ -132,27 +132,16 @@ class EnsembleManager(object):
 
         paths = set()
 
-        # Look for direct connections
-        try:
-            edge = self.graph.edges.get(from_node, to_node)
-
-            assert edge.from_node == from_node
-            assert edge.to_node == to_node
-
-            path = Path([edge])
-
-            # Add if it has weight
-            if path.get_weight():
-                paths.add(path)
-
-        except EdgeNotFound:
-            # No worries
-            pass
-
-        # Recurse to connected elements
         for edge in self.graph.edges.from_node(from_node):
-            # Only recurse when the initial Edge has weight
+            # Only process when the initial Edge has weight
             if edge.get_weight():
+
+                if edge.to_node == to_node:
+                    # This is a direct connection, create and add Path
+                    path = Path([edge])
+                    paths.add(path)
+
+                # Recurse further
                 ensemble = self.get(edge.to_node, to_node)
 
                 # Create non-trivial paths
