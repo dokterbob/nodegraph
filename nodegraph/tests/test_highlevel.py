@@ -263,6 +263,9 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
 
         ensemble = self.g.ensembles.get(self.n, self.n2)
 
+        # Note: there is an asymptote here around 5.2631578947324655
+        self.assertAlmostEqual(ensemble.get_weight(), 5.3, places=1)
+
 
 if __name__ == '__main__':
     unittest.main()
