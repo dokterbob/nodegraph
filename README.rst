@@ -10,7 +10,6 @@ TODO
 ----
 *. Pickling or storage backend.
 *. Factor out common caching code to decorator.
-*. Refactor test organization.
 *. Bi-directional lookups.
 *. Flow semantics.
 *. Redis storage backend.
