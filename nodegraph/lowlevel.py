@@ -113,9 +113,6 @@ class Node(object):
         assert isinstance(graph, Graph)
         self.graph = graph
 
-        # Add oneself to graph
-        self.graph.nodes.add(self)
-
     def key(self):
         """ Key used for hashing and comparisons. """
         return (self.graph.key(), self.name)
@@ -217,21 +214,18 @@ class Edge(object):
     score which can only be increased or decreased.
     """
 
-    def __init__(self, from_node, to_node):
+    def __init__(self, graph, from_node, to_node):
         # Initialize properties
+        assert isinstance(graph, Graph)
         assert isinstance(from_node, Node)
         assert isinstance(to_node, Node)
         assert from_node is not to_node, 'From node to node are the same.'
+        assert from_node.graph == graph
+        assert to_node.graph == graph
 
+        self.graph = graph
         self.from_node = from_node
         self.to_node = to_node
-
-        # Set graph
-        assert self.from_node.graph == self.to_node.graph
-        self.graph = self.from_node.graph
-
-        # Add oneself to graph
-        self.graph.edges.add(self)
 
     def increase_score(self, amount=100):
         """ Increase the score with the given amount. """

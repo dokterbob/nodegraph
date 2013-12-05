@@ -1,6 +1,6 @@
 import unittest
 
-from ..lowlevel import Graph, Node, Edge
+from ..lowlevel import Graph
 
 from .mixins import GraphTestMixin, NodeTestMixin, EdgeTestMixin, DualPathTestMixin
 
@@ -76,8 +76,8 @@ class TestNode(NodeTestMixin, unittest.TestCase):
 
     def test_hash(self):
         """ Test hashing for Node / equivalence of duplicates. """
-        same_node = Node(graph=self.g, name=self.n.name)
-        other_node = Node(graph=self.g, name='other_node')
+        same_node = self.g.nodes.create(name=self.n.name)
+        other_node = self.g.nodes.create(name='other_node')
 
         # Node objects equality
         self.assertEquals(same_node, self.n)
@@ -135,7 +135,7 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         # Increase score to make life more interesting
         self.e.increase_score()
 
-        duplicate_edge = Edge(from_node=self.n, to_node=self.n2)
+        duplicate_edge = self.g.edges.create(from_node=self.n, to_node=self.n2)
 
         # Assert equality
         self.assertEquals(self.e, duplicate_edge)
@@ -200,8 +200,8 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.assertEquals(self.n.get_min_ttl_out(), 7)
 
         # Two Edges
-        n3 = Node(graph=self.g, name='node_3')
-        e2 = Edge(self.n, n3)
+        n3 = self.g.nodes.create(name='node_3')
+        e2 = self.g.edges.create(self.n, n3)
         e2.ttl = 3
 
         # Value should be cached for 7 seconds
@@ -230,8 +230,8 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         self.e.increase_score()
         self.assertEqual(self.e.score, 100)
 
-        n3 = Node(graph=self.g, name='node_3')
-        e2 = Edge(self.n, n3)
+        n3 = self.g.nodes.create(name='node_3')
+        e2 = self.g.edges.create(self.n, n3)
         e2.increase_score()
         self.assertEqual(e2.score, 100)
 
@@ -247,8 +247,8 @@ class TestEdge(EdgeTestMixin, unittest.TestCase):
         Test unequal weight distribution for multiple Edges from `self.n`.
         """
         # Start from situation above
-        n3 = Node(graph=self.g, name='node_3')
-        e2 = Edge(self.n, n3)
+        n3 = self.g.nodes.create(name='node_3')
+        e2 = self.g.edges.create(self.n, n3)
         e2.increase_score()
         self.assertEqual(e2.score, 100)
 

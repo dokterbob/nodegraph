@@ -5,7 +5,6 @@ from .mixins import (
     EnsembleTestMixin
 )
 
-from ..lowlevel import Edge, Node
 from ..highlevel import Path
 
 
@@ -115,8 +114,10 @@ class TestComplexPath(ComplexPathTestMixin, unittest.TestCase):
         self.p3:      [ <self.n> -> <self.n2> -> <self.n3> ]
         forking_path: [ <self.n> -> <forking_node> ]
         """
-        forking_node = Node(graph=self.g, name='forking_node')
-        forking_edge = Edge(from_node=self.n, to_node=forking_node)
+        forking_node = self.g.nodes.create(name='forking_node')
+        forking_edge = self.g.edges.create(
+            from_node=self.n, to_node=forking_node
+        )
         forking_path = Path([forking_edge])
 
         # In the fork, have 1/3 of the weight go to the forking edge
@@ -256,7 +257,7 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
     def test_recursion_cutoff(self):
         """ Test whether recursion is appropriately prevented. """
 
-        self.e4 = Edge(self.n2, self.n)
+        self.e4 = self.g.edges.create(self.n2, self.n)
 
         self.e.increase_score()
         self.e4.increase_score()
@@ -269,7 +270,7 @@ class TestEnsembleManager(EnsembleTestMixin, unittest.TestCase):
     def test_max_recursion(self):
         """ Test maximum recursion cutoff. """
 
-        self.e4 = Edge(self.n2, self.n)
+        self.e4 = self.g.edges.create(self.n2, self.n)
 
         self.e.increase_score()
         self.e4.increase_score()

@@ -10,15 +10,20 @@ class NodeManager(object):
         # Shorthand for storage
         self._nodes = graph.store.nodes
 
+    def create(self, name):
+        """ Create a Node and add it to the graph. Returns Node. """
+
+        from .lowlevel import Node
+
+        node = Node(graph=self.graph, name=name)
+
+        self._nodes.add(node)
+
+        return node
+
     def all(self):
         """ Return all nodes in the current graph. """
         return self._nodes
-
-    def add(self, node):
-        """ Add a Node to the Graph. """
-        # isinstance(node, Node)
-
-        self._nodes.add(node)
 
     def remove(self, node):
         """ Remove a Npde from the Graph. """
@@ -63,11 +68,16 @@ class EdgeManager(object):
         """ Return edges in the current graph. """
         return self._edges
 
-    def add(self, edge):
-        """ Add an Edge to the Graph. """
-        # assert isinstance(edge, Edge)
+    def create(self, from_node, to_node):
+        """ Create an Edge and add it to the Graph. Returns Edge. """
+        from .lowlevel import Edge
 
+        edge = Edge(graph=self.graph, from_node=from_node, to_node=to_node)
+
+        # Add oneself to graph
         self._edges.add(edge)
+
+        return edge
 
     def remove(self, edge):
         """ Remove an Edge from the Graph. """
