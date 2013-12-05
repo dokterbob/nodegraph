@@ -1,5 +1,6 @@
 import sys
 from .lowlevel import Edge
+from .cache import cache_value
 
 
 class Path(object):
@@ -66,6 +67,7 @@ class Path(object):
 
         return min_ttl
 
+    @cache_value('weight')
     def get_weight(self):
         """
         Returns the weight for this path.
@@ -74,14 +76,6 @@ class Path(object):
         all the Path's Edges multiplied with the Graph's `path_dampening`
         factor for each Edge.
         """
-
-        # Nice hashable tuple of self and identifier
-        cache_key = (self, 'weight')
-
-        # Hit cache
-        cached = self.graph.store.cache.get(cache_key)
-        if cached is not None:
-            return cached
 
         weight = 1.0
         for edge in self.edges:
@@ -99,12 +93,6 @@ class Path(object):
         # Assert a sensible value
         assert len(self.edges) == 1 and weight < 1.0 or weight <= 1.0
         assert weight >= 0.0
-
-        # Get minimal outgoing ttl for Edges
-        ttl = self.get_ttl()
-
-        # Write to cache
-        self.graph.store.cache.set(cache_key, weight, ttl)
 
         return weight
 
@@ -186,6 +174,7 @@ class Ensemble(object):
 
         return min_ttl
 
+    @cache_value('weight')
     def get_weight(self):
         """
         Returns the weight for this Ensemble.
@@ -194,25 +183,11 @@ class Ensemble(object):
         the Paths it consists of. As such, it is not normalized.
         """
 
-        # Nice hashable tuple of self and identifier
-        cache_key = (self, 'weight')
-
-        # Hit cache
-        cached = self.graph.store.cache.get(cache_key)
-        if cached is not None:
-            return cached
-
         weight = 0.0
         for path in self.paths:
             weight += path.get_weight()
 
         # Assert a sensible value
         assert weight >= 0.0
-
-        # Get minimal outgoing ttl for Paths
-        ttl = self.get_ttl()
-
-        # Write to cache
-        self.graph.store.cache.set(cache_key, weight, ttl)
 
         return weight

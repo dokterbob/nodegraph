@@ -83,3 +83,40 @@ class GraphCache(object):
 
         # Key -> Expiry dates
         self._expires = {}
+
+
+def cache_value(key):
+    """
+    Caching decorator using the get_ttl() method to cache values during
+    a particular time.
+    """
+    def cache_decorator(func):
+        """ Wrapper generating the decorator based on key argument. """
+
+        def wrapper(self, *args, **kwargs):
+            """ Method performing the actual caching. """
+            assert hasattr(self, 'graph')
+            assert hasattr(self, 'get_ttl')
+
+            cache_key = (self, 'weight')
+
+            # Hit cache
+            cached = self.graph.store.cache.get(cache_key)
+            if cached is not None:
+                return cached
+
+            # No cached value, generate value
+            value = func(self, *args, **kwargs)
+
+            # Get minimal outgoing ttl for Edges
+            ttl = self.get_ttl()
+
+            # Write to cache
+            self.graph.store.cache.set(cache_key, value, ttl)
+
+            return value
+
+        return wrapper
+
+    return cache_decorator
+
