@@ -1,5 +1,5 @@
 from ..cache import GraphCache
-from ..lowlevel import Graph, Edge
+from ..graph import Graph
 from ..highlevel import Path, Ensemble
 
 

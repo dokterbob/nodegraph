@@ -10,7 +10,6 @@ TODO
 ----
 *. Pickling or storage backend.
 *. Factor out common caching code to decorator.
-*. Refactor highlevel/lowlevel distinction.
 *. Refactor test organization.
 *. Bi-directional lookups.
 *. Flow semantics.

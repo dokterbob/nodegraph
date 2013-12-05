@@ -1,8 +1,10 @@
 import unittest
 
-from ..lowlevel import Graph
+from ..graph import Graph
 
-from .mixins import GraphTestMixin, NodeTestMixin, EdgeTestMixin, DualPathTestMixin
+from .mixins import (
+    GraphTestMixin, NodeTestMixin, EdgeTestMixin, DualPathTestMixin
+)
 
 
 class TestGraph(GraphTestMixin, unittest.TestCase):
