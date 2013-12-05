@@ -8,12 +8,13 @@ WARNING: API highly in flux - not anywhere near production-ready.
 
 TODO
 ----
+*. Pickling or storage backend.
 *. Factor out common caching code to decorator.
 *. Refactor highlevel/lowlevel distinction.
 *. Refactor test organization.
 *. Bi-directional lookups.
 *. Flow semantics.
-*. Redis storage backgend.
+*. Redis storage backend.
 
 Running tests
 -------------
