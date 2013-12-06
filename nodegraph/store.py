@@ -1,3 +1,5 @@
+import cPickle as pickle
+
 from .cache import GraphCache
 
 
@@ -57,3 +59,14 @@ class GraphStore(object):
 
     def __hash__(self):
         return hash(self.key())
+
+    def save(self, f):
+        """ Save pickled Graph to file-like object. """
+
+        pickle.dump(self, f)
+
+    @classmethod
+    def load(cls, f):
+        """ Load pickled Graph from file-like object. """
+
+        return pickle.load(f)

@@ -1,4 +1,5 @@
 import unittest
+import tempfile
 
 from ..store import GraphStore
 
@@ -32,6 +33,20 @@ class TestGraphStore(unittest.TestCase):
         # Hash equality
         self.assertEquals(hash(same), hash(s))
         self.assertNotEquals(hash(other), hash(s))
+
+    def test_pickle(self):
+        """ Basic test of Pickle functionality. """
+        with tempfile.TemporaryFile() as f:
+            s = GraphStore(name='test')
+            s.save(f)
+            del s
+
+            # Rewind file pointer
+            f.seek(0)
+
+            s = GraphStore.load(f)
+            self.assertEquals(s.name, 'test')
+
 
 if __name__ == '__main__':
     unittest.main()

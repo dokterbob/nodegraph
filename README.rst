@@ -8,7 +8,6 @@ WARNING: API highly in flux - not anywhere near production-ready.
 
 TODO
 ----
-*. Pickling or storage backend.
 *. Bi-directional lookups.
 *. Flow semantics.
 *. Redis storage backend.
